@@ -15,7 +15,7 @@ public interface ProductCategoryService {
     // 买家端
 
     /**
-     * 查询所有
+     * 查询所有类目
      * @return
      */
     List<ProductCategory> findAll();
