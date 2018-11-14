@@ -1,12 +1,11 @@
 package com.xinyan.sell.service.impl;
 
 import com.xinyan.sell.po.ProductCategory;
-import com.xinyan.sell.repositoty.ProductCategoryRepository;
+import com.xinyan.sell.repository.ProductCategoryRepository;
 import com.xinyan.sell.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

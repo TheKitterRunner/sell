@@ -1,4 +1,4 @@
-package com.xinyan.sell.repositoty;
+package com.xinyan.sell.repository;
 
 import com.xinyan.sell.po.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * 3061
  * 2018/11/14
  * 商品类目的 Repository 接口
  */
@@ -17,5 +16,5 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * @param categoryTypeList
      * @return
      */
-    public List<ProductCategory> findByCategoryIdIn(List<Integer> categoryTypeList);
+    public List<ProductCategory> findByCategoryTypeIn(List<Integer> categoryTypeList);
 }
