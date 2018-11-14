@@ -21,6 +21,7 @@ public class ProductCategoryRepositoryTest {
     @Autowired
     private ProductCategoryRepository repository;
 
+    // 保存
     @Test
     public void saveTest(){
         ProductCategory productCategory = new ProductCategory();
@@ -30,16 +31,29 @@ public class ProductCategoryRepositoryTest {
         Assert.assertNotEquals(null, result);
     }
 
+    // 查询单个
     @Test
     public void findOneTest(){
         ProductCategory productCategory = repository.findOne(1);
+//        System.out.println(productCategory);
 //        Assert.assertNotEquals(null, productCategory);
         Assert.assertNotNull("根据id查类目", productCategory);
     }
 
+    // 查询多个
     @Test
     public void findByCategoryTypeInTest(){
-        List<ProductCategory> productCategoryList = repository.findByCategoryIdIn(Arrays.asList(10, 11));
+        List<ProductCategory> productCategoryList = repository.findByCategoryTypeIn(Arrays.asList(10, 11));
         Assert.assertNotNull("根据多个id查类目", productCategoryList);
+    }
+
+    // 修改
+    @Test
+    public void updateTest(){
+        ProductCategory productCategory = repository.findOne(2);
+        productCategory.setCategoryName("男神最爱");
+
+        ProductCategory result = repository.save(productCategory);
+        Assert.assertNotNull(result);
     }
 }
