@@ -32,10 +32,6 @@ public class ProductCategoryServiceTest {
         Assert.assertNotNull(productCategory);
     }
 
-//    public void findAllTest(){
-//        productCategoryService.findAll();
-//    }
-
     // 测试查询多个
     @Test
     public void findByTypesTest(){
