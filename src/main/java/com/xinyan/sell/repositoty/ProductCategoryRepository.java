@@ -17,5 +17,5 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
      * @param categoryTypeList
      * @return
      */
-    public List<ProductCategory> findByCategoryIdIn(List<Integer> categoryTypeList);
+    public List<ProductCategory> findByCategoryTypeIn(List<Integer> categoryTypeList);
 }
