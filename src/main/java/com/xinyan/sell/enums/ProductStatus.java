@@ -5,6 +5,7 @@ import lombok.Getter;
 /**
  * 3061
  * 2018/11/14
+ * 商品状态枚举类
  */
 @Getter
 public enum ProductStatus {

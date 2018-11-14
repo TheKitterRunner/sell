@@ -25,18 +25,9 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public void saveProduct() {
-        ProductInfo productInfo = new ProductInfo();
-        productInfo.setProductId(KeyUtil.generatedUniqueKey());
-        productInfo.setProductName("凉皮");
-        productInfo.setProductPrice(new BigDecimal(20));
-        productInfo.setProductStock(100);
-        productInfo.setProductDescription("正宗陕西臊子面");
-        productInfo.setProductIcon("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2591780415,1191633011&fm=26&gp=0.jpg");
-        productInfo.setProductStatus(1);
-        productInfo.setCategoryType(10);
-        System.out.println(productInfo);
+    public ProductInfo saveProduct(ProductInfo productInfo) {
         ProductInfo productInfo1 = productRepository.save(productInfo);
+        return productInfo;
     }
 
     @Override

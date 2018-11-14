@@ -38,7 +38,7 @@ public class ProductInfo {
     private String productIcon;
 
     /** 状态 */
-    private Integer productStatus;
+    private Integer productStatus = 0;
 
     /** 类目类型  0:上架 1下架 */
     private Integer categoryType;

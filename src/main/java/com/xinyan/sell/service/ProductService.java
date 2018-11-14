@@ -18,7 +18,7 @@ public interface ProductService {
     /**
      * 添加商品
      */
-    void saveProduct();
+    ProductInfo saveProduct(ProductInfo productInfo);
 
     /**
      * 根据id删除商品
