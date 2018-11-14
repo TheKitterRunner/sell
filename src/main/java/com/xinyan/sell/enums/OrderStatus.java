@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * 3061
  * 2018/11/14
- * 订单详情
+ * 外卖订单详情
  */
 @Getter
 public enum OrderStatus {
