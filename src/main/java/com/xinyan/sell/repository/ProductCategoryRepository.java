@@ -1,4 +1,4 @@
-package com.xinyan.sell.repositoty;
+package com.xinyan.sell.repository;
 
 import com.xinyan.sell.po.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
