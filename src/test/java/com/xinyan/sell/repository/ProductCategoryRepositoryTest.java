@@ -1,6 +1,7 @@
 package com.xinyan.sell.repository;
 
 import com.xinyan.sell.po.ProductCategory;
+import com.xinyan.sell.service.ProductCategoryService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +26,8 @@ public class ProductCategoryRepositoryTest {
     @Test
     public void saveTest(){
         ProductCategory productCategory = new ProductCategory();
-        productCategory.setCategoryName("男生最爱");
-        productCategory.setCategoryType(11);
+        productCategory.setCategoryName("女生最爱");
+        productCategory.setCategoryType(12);
         ProductCategory result = repository.save(productCategory);
         Assert.assertNotEquals(null, result);
     }
@@ -51,9 +52,15 @@ public class ProductCategoryRepositoryTest {
     @Test
     public void updateTest(){
         ProductCategory productCategory = repository.findOne(2);
-        productCategory.setCategoryName("男神最爱");
+        productCategory.setCategoryName("男生最爱");
 
         ProductCategory result = repository.save(productCategory);
         Assert.assertNotNull(result);
+    }
+
+    // 测试删除
+    @Test
+    public void deleteTest(){
+        repository.delete(3);
     }
 }
