@@ -28,7 +28,7 @@ public interface ProductCategoryService {
     List<ProductCategory> findByCategoryTypeList(List<Integer> productCategoryTypeList);
 
     /**
-     * 查询单个
+     * 查询单个类目
      * @param categoryId
      * @return
      */
