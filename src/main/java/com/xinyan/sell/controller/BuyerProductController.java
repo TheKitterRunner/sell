@@ -1,6 +1,5 @@
-package com.xinyan.controller;
+package com.xinyan.sell.controller;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.xinyan.sell.po.ProductCategory;
 import com.xinyan.sell.po.ProductInfo;
 import com.xinyan.sell.service.ProductCategoryService;
