@@ -29,7 +29,7 @@ public class ProductServiceTest {
     public void saveProductTest() {
         ProductInfo productInfo = new ProductInfo();
         productInfo.setProductId(KeyUtil.generatedUniqueKey());
-        productInfo.setProductName("凉皮");
+        productInfo.setProductName("臊子面");
         productInfo.setProductPrice(new BigDecimal(20));
         productInfo.setProductStock(100);
         productInfo.setProductDescription("正宗陕西臊子面");
@@ -55,20 +55,21 @@ public class ProductServiceTest {
     @Test
     public void findByProductStatusTest() {
         List<ProductInfo> productlList = productService.findByProductStatus(1);
-        Assert.assertEquals(0,productlList.size());
+        Assert.assertNotEquals(0,productlList.size());
     }
 
     // 根据商品的id的集合查找
     @Test
     public void findByProductIdListTest() {
-        List<ProductInfo> productInfoList = productService.findByProductIdList(Arrays.asList("97a03a96577242408eb9eabefd6dd29d"));
+        List<ProductInfo> productInfoList = productService.findByProductIdList(Arrays.asList("97a03a96577242408eb9eabefd6dd29d","75b56c1092804064bef98d2ab97fb14b"));
+        Assert.assertNotEquals(0,productInfoList.size());
     }
 
     // 查询所有的shangpin
     @Test
     public void findAllTest() {
         List<ProductInfo> list = productService.findAll();
-        Assert.assertNotEquals(0,list);
+        Assert.assertNotEquals(0,list.size());
     }
 
     // 分页查询
