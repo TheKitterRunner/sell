@@ -24,19 +24,28 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * 添加商品
+     * @param productInfo
+     * @return
+     */
     @Override
     public ProductInfo saveProduct(ProductInfo productInfo) {
         ProductInfo productInfo1 = productRepository.save(productInfo);
         return productInfo;
     }
 
+    /**
+     * 根据id删除商品
+     * @param productId
+     */
     @Override
     public void deleteProduct(String productId) {
         productRepository.delete(productId);
     }
 
     /**
-     * 未完成
+     * 更新商品信息
      * @param productId
      */
     @Override
@@ -44,21 +53,40 @@ public class ProductServiceImpl implements ProductService {
         ProductInfo productInfo = productRepository.findOne(productId);
     }
 
+    /**
+     * 根据商品id查询单个商品
+     * @param productId
+     * @return
+     */
     @Override
     public ProductInfo findOneProductById(String productId) {
         return productRepository.findOne(productId);
     }
 
+    /**
+     * 根据商品状态查询
+     * @param productId
+     * @return
+     */
     @Override
     public List<ProductInfo> findByProductStatus(Integer productId) {
         return productRepository.findByProductStatus(productId);
     }
 
+    /**
+     * 根据商品的id 的集合查询
+     * @param productIdList
+     * @return
+     */
     @Override
     public List<ProductInfo> findByProductIdList(List<String> productIdList) {
         return productRepository.findByProductIdIn(productIdList);
     }
 
+    /**
+     * 商品列表
+     * @return
+     */
     @Override
     public List<ProductInfo> findAll() {
         return productRepository.findAll();
@@ -75,4 +103,8 @@ public class ProductServiceImpl implements ProductService {
         Page<ProductInfo> productInfoPage = productRepository.findAll(pageable);
         return productInfoPage;
     }
+
+    /**
+     * 减少商品库存
+     */
 }

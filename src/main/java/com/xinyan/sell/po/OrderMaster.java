@@ -19,6 +19,7 @@ import java.util.Date;
 @Entity
 public class OrderMaster {
 
+    /** 订单id*/
     @Id
     private String orderId;
 
@@ -38,10 +39,10 @@ public class OrderMaster {
     private BigDecimal orderAmount;
 
     /**订单状态 默认为下单状态*/
-    private Integer orderStatus;
+    private Integer orderStatus = 0;
 
     /**支付状态 默认支付状态*/
-    private Integer payStatus;
+    private Integer payStatus = 0;
 
     /**创建时间*/
     private Date createTime;
