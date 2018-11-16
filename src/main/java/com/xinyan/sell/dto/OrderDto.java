@@ -1,6 +1,7 @@
 package com.xinyan.sell.dto;
 
 import com.xinyan.sell.po.OrderDetail;
+import lombok.Data;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.List;
  *
  * 订单信息传输的类(用于在Controller层和Service层)
  */
+@Data
 public class OrderDto {
 
     @Id
