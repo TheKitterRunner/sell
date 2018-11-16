@@ -1,5 +1,7 @@
 package com.xinyan.sell.service.impl;
 
+import com.sun.xml.internal.bind.v2.TODO;
+import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
 import com.xinyan.sell.enums.PayStatus;
@@ -12,6 +14,7 @@ import com.xinyan.sell.repository.OrderDetailRepository;
 import com.xinyan.sell.repository.OrderMasterRepository;
 import com.xinyan.sell.repository.ProductRepository;
 import com.xinyan.sell.service.OrderService;
+import com.xinyan.sell.service.ProductService;
 import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +24,7 @@ import sun.rmi.runtime.Log;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Nico
@@ -36,7 +40,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    private ProductRepository  productRepository;
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     /**
      * 创建订单
@@ -45,10 +53,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        // 生成订单的主键
-        String orderPk = KeyUtil.generatedUniqueKey();
+        // 生成订单的ID
+        String orderId = KeyUtil.generatedUniqueKey();
         // 用来表示订单总金额
         BigDecimal totalAmount = new BigDecimal(0);
+        // 订单主表的订单id
+        orderDto.setOrderId(orderId);
         // 查询商品
         List<OrderDetail> orderDetailList = orderDto.getOrderDetailList();
         for (OrderDetail orderDetail : orderDetailList){
@@ -63,21 +73,27 @@ public class OrderServiceImpl implements OrderService {
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
-            orderDetail.setOrderId(orderPk);
+            orderDetail.setDetailId(KeyUtil.generatedUniqueKey());
+            orderDetail.setOrderId(orderDto.getOrderId());
+            BeanUtils.copyProperties(productInfo,orderDetail);
             orderDetailRepository.save(orderDetail);
         }
         // 订单主表入库
         OrderMaster orderMaster = new OrderMaster();
         BeanUtils.copyProperties(orderDto, orderMaster);
         orderMaster.setOrderAmount(totalAmount);
-        orderMaster.setOrderId(orderPk);
         orderMaster.setOrderStatus(OrderStatus.NEW_ORDER.getCode());
         orderMaster.setPayStatus(PayStatus.WAIT.getCode());
         // 保存主表信息到数据库
         orderMasterRepository.save(orderMaster);
 
         // 更新商品的库存
+        List<CartDto> cartDtoList = orderDto.getOrderDetailList().stream().
+                map(e -> new CartDto(e.getProductId(), e.getProductQuantity())).
+                collect(Collectors.toList());
+        productService.decreaseStock(cartDtoList);
 
-        return null;
+        // 返回数据
+        return orderDto;
     }
 }
