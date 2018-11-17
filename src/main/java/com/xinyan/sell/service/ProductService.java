@@ -1,5 +1,6 @@
 package com.xinyan.sell.service;
 
+import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.po.ProductInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,4 +65,10 @@ public interface ProductService {
      * @return
      */
     Page<ProductInfo> findAll(Pageable pageable);
+
+    /**
+     * 更新库存
+     * @param cartDtoList
+     */
+    void decreaseStock(List<CartDto> cartDtoList);
 }
