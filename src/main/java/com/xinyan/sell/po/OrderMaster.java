@@ -21,6 +21,7 @@ import java.util.Date;
 @Entity
 public class OrderMaster {
 
+    /** 订单id*/
     @Id
     private String orderId;
 

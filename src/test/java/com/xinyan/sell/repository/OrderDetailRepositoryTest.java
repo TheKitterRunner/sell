@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
+/**
+ * OrderDetailRepository接口单元测试
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderDetailRepositoryTest {
