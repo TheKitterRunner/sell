@@ -19,6 +19,8 @@ import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sun.rmi.runtime.Log;
 
@@ -95,5 +97,37 @@ public class OrderServiceImpl implements OrderService {
 
         // 返回数据
         return orderDto;
+    }
+
+    /**
+     * 查询单个订单
+     * @param orderId
+     * @return
+     */
+    @Override
+    public OrderDto findOne(String orderId) {
+        OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
+        OrderDto orderDto = new OrderDto();
+        BeanUtils.copyProperties(orderMaster, orderDto);
+
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
+        orderDto.setOrderDetailList(orderDetailList);
+
+        return orderDto;
+    }
+
+    @Override
+    public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public OrderDto cancelOrder(OrderDto orderDto) {
+        return null;
+    }
+
+    @Override
+    public OrderDto finish(OrderDto orderDto) {
+        return null;
     }
 }

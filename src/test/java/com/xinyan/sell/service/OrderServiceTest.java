@@ -19,13 +19,12 @@ public class OrderServiceTest {
 
     @Test
     public void createOrder() {
-        OrderDto orderDto = new OrderDto();
-        orderDto.setBuyerName("李四");
-        orderDto.setBuyerAddress("资信达大厦");
-        orderDto.setBuyerOpenid("11234455");
-        orderDto.setBuyerPhone("12345454787");
-
-        List<OrderDetail> orderDetailList = new ArrayList<>();
+//        OrderDto orderDto = new OrderDto();
+//        orderDto.setBuyerName("李四");
+//        orderDto.setBuyerAddress("资信达大厦");
+//        orderDto.setBuyerOpenid("11234455");
+//        orderDto.setBuyerPhone("12345454787");
+//        List<OrderDetail> orderDetailList = new ArrayList<>();
 
     }
 }
