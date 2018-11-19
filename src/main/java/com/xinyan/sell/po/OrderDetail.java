@@ -1,5 +1,9 @@
 package com.xinyan.sell.po;
 
+import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -8,6 +12,10 @@ import java.util.Date;
  * Nico
  * 2018/11/16
  */
+
+@Data
+@DynamicUpdate
+@Entity
 public class OrderDetail {
 
     /** 订单详情编号 */

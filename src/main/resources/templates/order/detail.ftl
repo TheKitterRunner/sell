@@ -56,8 +56,8 @@
                                                 <th>订单金额</th>
                                             </tr>
                                             <tr>
-                                                <td>${orderDTO.orderId}</td>
-                                                <td>${orderDTO.orderAmount}</td>
+                                                <td>${orderDto.orderId}</td>
+                                                <td>${orderDto.orderAmount}</td>
                                             </tr>
                                             </thead>
                                         </table>
@@ -75,7 +75,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <#list orderDTO.orderDetailList as orderDetail>
+                                            <#list orderDto.orderDetailList as orderDetail>
                                             <tr>
                                                 <td>${orderDetail.productId}</td>
                                                 <td>${orderDetail.productName}</td>
@@ -87,11 +87,11 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <#if orderDTO.orderStatus == 0>
+                                    <#if orderDto.orderStatus == 0>
                                     <div class="col-md-12">
                                         <div class="btn-group" role="group">
-                                            <a href="${basePath}/seller/order/finish?orderId=${orderDTO.orderId}" class="btn btn-success">完结订单</a>
-                                            <a href="${basePath}/seller/order/cancel?orderId=${orderDTO.orderId}" class="btn btn-danger">取消订单</a>
+                                            <a href="${basePath}/seller/order/finish?orderId=${orderDto.orderId}" class="btn btn-success">完结订单</a>
+                                            <a href="${basePath}/seller/order/cancel?orderId=${orderDto.orderId}" class="btn btn-danger">取消订单</a>
                                         </div>
                                     </div>
                                     </#if>

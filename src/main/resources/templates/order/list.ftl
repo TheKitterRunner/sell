@@ -57,7 +57,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <#list orderDTOPage.content as orderDTO >
+                                        <#list orderDtoPage.content as orderDTO >
                                         <tr>
                                             <td>${orderDTO.orderId}</td>
                                             <td>${orderDTO.buyerName}</td>
@@ -79,21 +79,21 @@
                                 </table>
                                 <!-- 分页 -->
                                 <ul class="pagination float-right">
-                                        <#if orderDTOPage.first>
+                                        <#if orderDtoPage.first>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDTOPage.number}">
+                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number}">
                                                 上一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDTOPage.number}" aria-label="Previous">
+                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number}" aria-label="Previous">
                                                 上一页
                                             </a>
                                         </li>
                                         </#if>
-                                        <#list 1..orderDTOPage.totalPages as index>
-                                            <#if orderDTOPage.number == (index - 1)>
+                                        <#list 1..orderDtoPage.totalPages as index>
+                                            <#if orderDtoPage.number == (index - 1)>
                                         <li class="page-item active">
                                             <a class="page-link" href="${basePath}/seller/order/list?page=${index}">${index}</a>
                                         </li>
@@ -103,15 +103,15 @@
                                         </li>
                                             </#if>
                                         </#list>
-                                        <#if orderDTOPage.last>
+                                        <#if orderDtoPage.last>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDTOPage.number+1}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number+1}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDTOPage.number+2}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number+2}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>
