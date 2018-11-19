@@ -100,19 +100,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 查询单个订单
+     * 根据orderId查询订单详情(单个订单)
      * @param orderId
      * @return
      */
     @Override
     public OrderDto findOne(String orderId) {
-        OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
+        //根据orderId查询订单主表
+        OrderMaster byOrderId = orderMasterRepository.findByOrderId(orderId);
         OrderDto orderDto = new OrderDto();
-        BeanUtils.copyProperties(orderMaster, orderDto);
-
-        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
-        orderDto.setOrderDetailList(orderDetailList);
-
+        BeanUtils.copyProperties(byOrderId,orderDto);
+        //根据orderId查询订单详情表
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
+        //把每一个订单详情表写进orderDTO中
+        orderDto.setOrderDetailList(orderDetails);
         return orderDto;
     }
 

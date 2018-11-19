@@ -3,6 +3,7 @@ package com.xinyan.sell.repository;
 import com.xinyan.sell.po.OrderDetail;
 import com.xinyan.sell.po.OrderMaster;
 import com.xinyan.sell.utils.KeyUtil;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -51,11 +53,11 @@ public class OrderDetailRepositoryTest {
         orderMasterRepository.save(orderMaster);
     }
     /**
-     * 通过orderID查找订单详情
+     * 根据订单Id查询订单详情
      */
     @Test
     public void findByOrderId() {
-
-
+        List<OrderDetail> orderId = orderDetailRepository.findByOrderId("47ffea01cdf743c794dd15f3108cd6ac");
+        Assert.assertNotNull(orderId);
     }
 }

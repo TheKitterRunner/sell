@@ -51,6 +51,14 @@ public class OrderMasterRepositoryTest {
 
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid, pageRequest);
         Assert.assertNotEquals("查询订单", orderMasterPage.getSize());
+    }
 
+    /**
+     * 根据订单id查询
+     */
+    @Test
+    public void findByOrderId(){
+        OrderMaster byOrderId = orderMasterRepository.findByOrderId("47ffea01cdf743c794dd15f3108cd6ac");
+        Assert.assertNotNull(byOrderId);
     }
 }
