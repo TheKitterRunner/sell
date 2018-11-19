@@ -1,6 +1,5 @@
 package com.xinyan.sell.service.impl;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -19,12 +18,12 @@ import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 计算订单总额
-            totalAmount.add(productInfo.getProductPrice().multiply(
+            totalAmount = totalAmount.add(productInfo.getProductPrice().multiply(
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
@@ -100,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 查询单个订单
+     * 查询单个订单(订单详情)
      * @param orderId
      * @return
      */
@@ -116,9 +115,18 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * 查询订单列表
+     * @param buyerOpenid
+     * @param pageable
+     * @return
+     */
     @Override
     public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
-        return null;
+        PageRequest pageRequest = new PageRequest(pageable.getPageNumber(),pageable.getPageSize());
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid, pageable);
+        Page<OrderDto> orderDtoPage = new PageImpl(orderMasterPage.getContent(), pageable, orderMasterPage.getTotalElements());
+        return orderDtoPage;
     }
 
     @Override
@@ -127,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto finish(OrderDto orderDto) {
+    public OrderDto finishOrder(OrderDto orderDto) {
         return null;
     }
 }

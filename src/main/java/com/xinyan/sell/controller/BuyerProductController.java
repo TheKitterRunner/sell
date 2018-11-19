@@ -75,7 +75,7 @@ public class BuyerProductController {
                 }
             }
 
-            // 将商品信息的视图层list赋值给商品类目地图层对象的productInfoVOList属性
+            // 将商品信息的视图层list赋值给商品类目视图层对象的productInfoVOList属性
             productCategoryVO.setProductInfoVOList(productInfoVOList);
             productCategoryVOList.add(productCategoryVO);
         }

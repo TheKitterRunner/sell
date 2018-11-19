@@ -1,10 +1,9 @@
 package com.xinyan.sell.service;
 
 import com.xinyan.sell.dto.OrderDto;
+import com.xinyan.sell.po.OrderMaster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 /**
  * Nico
@@ -27,7 +26,7 @@ public interface OrderService {
     OrderDto cancelOrder(OrderDto orderDto);
 
     // 支付订单
-    OrderDto finish(OrderDto orderDto);
+    OrderDto finishOrder(OrderDto orderDto);
 
 
 }
