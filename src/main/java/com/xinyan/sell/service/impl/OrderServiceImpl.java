@@ -1,5 +1,6 @@
 package com.xinyan.sell.service.impl;
 
+import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -18,12 +19,15 @@ import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 计算订单总额
-            totalAmount = totalAmount.add(productInfo.getProductPrice().multiply(
+            totalAmount.add(productInfo.getProductPrice().multiply(
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
@@ -105,13 +109,18 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderDto findOne(String orderId) {
+        //如果订单id为空，抛异常
+        if (orderId == null){
+            throw new SellException(ResultStatus.ORDER_NOT_EXIST);
+        }
+        //根据orderId查询出orderMaster对象
         OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
         OrderDto orderDto = new OrderDto();
+        //将orderMaster对象的属性复制给orderDto对象
         BeanUtils.copyProperties(orderMaster, orderDto);
-
+        //将查出来的orderDetailList设置进orderDto对象中，并返回
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
         orderDto.setOrderDetailList(orderDetailList);
-
         return orderDto;
     }
 
@@ -123,15 +132,46 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
-        PageRequest pageRequest = new PageRequest(pageable.getPageNumber(),pageable.getPageSize());
-        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid, pageable);
-        Page<OrderDto> orderDtoPage = new PageImpl(orderMasterPage.getContent(), pageable, orderMasterPage.getTotalElements());
+        //分页查询出订单主表
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid,pageable);
+        //将ordermasterPage对象转为orderDtoPage对象并返回
+        Page<OrderDto> orderDtoPage = new PageImpl(orderMasterPage.getContent(),pageable,orderMasterPage.getTotalElements());
         return orderDtoPage;
     }
 
+    /**
+     * 取消订单
+     * @param orderDto
+     * @return
+     */
     @Override
     public OrderDto cancelOrder(OrderDto orderDto) {
-        return null;
+        //1.判断订单状态，已完结和已取消订单不能取消
+        if (orderDto.getOrderStatus() != OrderStatus.NEW_ORDER.getCode()){
+            log.error("新订单无法取消，orderId:{},orderStatus:{}",
+                    orderDto.getOrderId(),orderDto.getOrderStatus());
+            throw new SellException(ResultStatus.ORDER_STATUS_ERROR);
+        }
+        //2.修改订单状态
+        orderDto.setOrderStatus(OrderStatus.CANCEL.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto,orderMaster);
+        //保存到数据库
+        OrderMaster orderMasterResult = orderMasterRepository.save(orderMaster);
+        if (orderMasterResult == null){
+            log.error("订单更新失败，orderMaster:{}",orderMaster);
+            throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
+        }
+        //3.修改库存(增加)
+        if (CollectionUtils.isEmpty(orderDto.getOrderDetailList())){
+            log.error("订单中无商品详情,orderDto:{}",orderDto);
+            throw new SellException(ResultStatus.ORDER_DETAIL_NOT_EXIST);
+        }
+        List<CartDto> cartDtoList = orderDto.getOrderDetailList().stream().
+                map(e -> new CartDto(e.getProductId(), e.getProductQuantity())).
+                collect(Collectors.toList());
+        productService.increaseStock(cartDtoList);
+        return orderDto;
     }
 
     @Override
