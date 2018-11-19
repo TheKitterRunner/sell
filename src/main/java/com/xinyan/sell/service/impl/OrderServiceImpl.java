@@ -1,6 +1,6 @@
 package com.xinyan.sell.service.impl;
 
-import com.sun.xml.internal.bind.v2.TODO;
+import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -20,11 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,9 +118,19 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * 订单列表
+     * @param buyerOpenid
+     * @param pageable
+     * @return
+     */
     @Override
     public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
-        return null;
+        //分页查询出订单主表
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid,pageable);
+        //将ordermasterPage对象转为orderDtoPage对象并返回
+        Page<OrderDto> orderDtoPage = new PageImpl(orderMasterPage.getContent(),pageable,orderMasterPage.getTotalElements());
+        return orderDtoPage;
     }
 
     @Override

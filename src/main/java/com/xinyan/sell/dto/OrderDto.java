@@ -36,10 +36,10 @@ public class OrderDto {
     private BigDecimal orderAmount;
 
     /**订单状态 默认为下单状态*/
-    private Integer orderStatus;
+    private Integer orderStatus = 1;
 
     /**支付状态 默认支付状态*/
-    private Integer payStatus;
+    private Integer payStatus = 1;
 
     /**创建时间*/
     private Date createTime;

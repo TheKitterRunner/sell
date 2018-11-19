@@ -1,5 +1,6 @@
 package com.xinyan.sell.repository;
 
+import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.po.OrderMaster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,5 @@ public interface OrderMasterRepository extends JpaRepository<OrderMaster, String
      * @return
      */
     Page<OrderMaster> findByBuyerOpenid(String buyerOpenid, Pageable pageable);
+
 }

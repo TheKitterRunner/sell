@@ -1,11 +1,15 @@
 package com.xinyan.sell.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.xinyan.sell.dto.OrderDto;
-import com.xinyan.sell.po.OrderDetail;
 import com.xinyan.sell.po.OrderMaster;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +21,13 @@ public class OrderServiceTest {
     @Autowired
     private OrderService orderService;
 
+//    @Test
+//    public void createOrder() {
+//
+//    }
     @Test
-    public void createOrder() {
-//        OrderDto orderDto = new OrderDto();
-//        orderDto.setBuyerName("李四");
-//        orderDto.setBuyerAddress("资信达大厦");
-//        orderDto.setBuyerOpenid("11234455");
-//        orderDto.setBuyerPhone("12345454787");
-//        List<OrderDetail> orderDetailList = new ArrayList<>();
+    public void findList(){
 
     }
+
 }

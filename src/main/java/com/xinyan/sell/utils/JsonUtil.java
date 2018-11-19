@@ -41,4 +41,17 @@ public final class JsonUtil {
         }
         return null;
     }
+
+    /**
+     * 把JavaBean转化为为Json字符串
+     */
+    public static String toJson(Object object){
+        try {
+            //格式化输出
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

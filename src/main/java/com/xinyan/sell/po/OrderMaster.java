@@ -25,16 +25,16 @@ public class OrderMaster {
     @Id
     private String orderId;
 
-    /**卖家名字*/
+    /**买家名字*/
     private String buyerName;
 
-    /**卖家电话*/
+    /**买家电话*/
     private String buyerPhone;
 
-    /**卖家地址*/
+    /**买家地址*/
     private String buyerAddress;
 
-    /**卖家微信openid*/
+    /**买家微信openid*/
     private String buyerOpenid;
 
     /**订单总额*/
