@@ -1,8 +1,11 @@
 package com.xinyan.sell.controller;
 
+import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.ResultStatus;
 import com.xinyan.sell.exception.SellException;
+import com.xinyan.sell.po.OrderDetail;
+import com.xinyan.sell.po.OrderMaster;
 import com.xinyan.sell.repository.OrderDetailRepository;
 import com.xinyan.sell.repository.OrderMasterRepository;
 import com.xinyan.sell.service.OrderService;
@@ -12,9 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Nico
@@ -31,6 +37,10 @@ public class BuyerOrderController {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
+    @Autowired
+    private OrderMasterRepository orderMasterRepository;
+
+
 
     /**
      * 查询订单详情
@@ -45,5 +55,20 @@ public class BuyerOrderController {
         }
         OrderDto orderDto = orderService.findOne(orderId);
         return ResultVOUtil.success(orderDto);
+    }
+
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/cancel")
+    public ResultVo cancel(@RequestParam("orderId") String orderId){
+        OrderMaster master = orderMasterRepository.findByOrderId(orderId);
+        OrderDto orderDto =OrderMasterToOrderDTOConverter.converter(master);
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
+        orderDto.setOrderDetailList(orderDetails);
+        orderService.cancelOrder(orderDto);
+        return ResultVOUtil.success(null);
     }
 }

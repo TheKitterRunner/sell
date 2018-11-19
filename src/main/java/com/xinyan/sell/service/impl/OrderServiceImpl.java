@@ -22,9 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import sun.rmi.runtime.Log;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,14 +119,47 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+
     @Override
     public Page<OrderDto> findList(String buyerOpenid, Pageable pageable) {
         return null;
     }
 
+    /**
+     * 取消订单
+     * @param orderDto
+     * @return
+     */
     @Override
     public OrderDto cancelOrder(OrderDto orderDto) {
-        return null;
+        //查询订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatus.NEW_ORDER.getCode())){
+           log.error("【取消订单】订单状态不正确，OrderId:{}, OrderStatus:{}",
+                     orderDto.getOrderId(),orderDto.getOrderStatus());
+        }
+        //修改支付状态
+        orderDto.setOrderStatus(OrderStatus.CANCEL.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto,orderMaster);
+        OrderMaster updateMaster = orderMasterRepository.save(orderMaster);
+        if(updateMaster == null){
+           log.error("【取消订单】订单更新失败，OrderMaster: {}",orderMaster);
+           throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
+        }
+
+        //返还库存
+        if(CollectionUtils.isEmpty(orderDto.getOrderDetailList())){
+            log.error("【取消订单】订单中无商品详情，OrderDto:{}",orderDto);
+            throw new SellException(ResultStatus.ORDER_DETAIL_NOT_EXIST);
+        }
+        List<CartDto> cartDtoList = orderDto.getOrderDetailList().stream()
+                .map(e ->new CartDto(e.getProductId(),e.getProductQuantity()))
+                .collect(Collectors.toList());
+        productService.increaseStock(cartDtoList);
+
+        //如果已经支付需要退款
+        return orderDto;
+
     }
 
     @Override

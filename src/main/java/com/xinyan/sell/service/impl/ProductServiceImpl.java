@@ -96,4 +96,23 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(productInfo);
         }
     }
+
+    /**
+     * 增加库存
+     * @param cartDtoList
+     */
+    @Override
+    public void increaseStock(List<CartDto> cartDtoList) {
+        for (CartDto cartDto : cartDtoList){
+            ProductInfo productInfo = productRepository.findOne(cartDto.getProductId());
+            if (productInfo == null){
+                log.info("更新库存商品不存在, productID = " + productInfo.getProductId());
+            }
+
+            // 当前的库存加上传递过来的订单中对应商品的数量
+            productInfo.setProductStock(productInfo.getProductStock() + cartDto.getQuantity());
+            productRepository.save(productInfo);
+        }
+    }
+
 }

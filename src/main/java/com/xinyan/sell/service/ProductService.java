@@ -67,8 +67,13 @@ public interface ProductService {
     Page<ProductInfo> findAll(Pageable pageable);
 
     /**
-     * 更新库存
+     * 更新库存(减少库存)
      * @param cartDtoList
      */
     void decreaseStock(List<CartDto> cartDtoList);
+
+    /**
+     * 增加库存
+     */
+    void increaseStock(List<CartDto> cartDtoList);
 }
