@@ -71,4 +71,19 @@ public class BuyerOrderController {
         orderService.cancelOrder(orderDto);
         return ResultVOUtil.success(null);
     }
+
+    /**
+     * 完结订单
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/finish")
+    public ResultVo finish(@RequestParam("orderId") String orderId){
+        OrderMaster master = orderMasterRepository.findByOrderId(orderId);
+        OrderDto orderDto =OrderMasterToOrderDTOConverter.converter(master);
+        OrderDto finish = orderService.finish(orderDto);
+        return ResultVOUtil.success(finish);
+
+    }
+
 }

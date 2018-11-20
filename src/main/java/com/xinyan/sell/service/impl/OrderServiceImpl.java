@@ -162,8 +162,29 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * 完结订单
+     * @param orderDto
+     * @return
+     */
     @Override
-    public OrderDto finish(OrderDto orderDto) {
-        return null;
+    public OrderDto finish(OrderDto orderDto){
+        //查询订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatus.NEW_ORDER.getCode())){
+            log.error("【完结订单】订单状态不正确，OrderId:{}, OrderStatus:{}"
+                    ,orderDto.getOrderId(),orderDto.getOrderStatus());
+            throw new SellException(ResultStatus.ORDER_STATUS_ERROR);
+        }
+
+        //修改订单状态
+        orderDto.setOrderStatus(OrderStatus.FINISHED.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto,orderMaster);
+        OrderMaster save = orderMasterRepository.save(orderMaster);
+        if(save == null){
+            log.error("【完结订单】订单更新失败，OrderMaster:{}",orderMaster);
+            throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
+        }
+        return orderDto;
     }
 }
