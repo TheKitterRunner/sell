@@ -7,6 +7,9 @@ import org.springframework.beans.BeanUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 转换类
+ */
 public class OrderMasterToOrderDTOConverter {
     public OrderMasterToOrderDTOConverter() {
 
