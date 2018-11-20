@@ -21,4 +21,5 @@ public class SellException extends RuntimeException{
         super(resultStatus.getMessage());
         this.code = resultStatus.getCode();
     }
+
 }

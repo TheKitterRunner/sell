@@ -27,10 +27,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.spi.ResolveResult;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Nico
@@ -54,29 +53,32 @@ public class BuyerOrderController {
     /**
      * 创建订单
      * @param orderForm
-     * @param bindingResult
+     * @param bingingResult
      * @return
      */
     @PostMapping("/create")
-    public ResultVo create(@Valid OrderForm orderForm, BindingResult bindingResult){
-        //校验参数
-        if (bindingResult.hasErrors()){
-            throw new SellException(ResultStatus.ORDER_PARAM_ERROR.getCode()
-                    ,bindingResult.getFieldError().getDefaultMessage());
+    public ResultVo createOrder(@Valid OrderForm orderForm, @Valid BindingResult bingingResult){
+        if (bingingResult.hasErrors()){
+            log.error("[创建订单] : 参数有误, orderForm : {}" , orderForm);
+            throw new SellException(ResultStatus.ORDER_PARAM_ERROR.getCode(),
+                    bingingResult.getFieldError().getDefaultMessage());
         }
-        //将OrderForm对象转化为DTO对象
+
+        // 将OrderForm 转换为orderDto
         OrderDto orderDto = OrderFormToOrderDTOConverter.converter(orderForm);
-        //判断订单详情列表是否为空，为空则抛异常
+
+        // 判断购物车是否为空
         if (CollectionUtils.isEmpty(orderDto.getOrderDetailList())){
-            log.error("创建订单，购物车不能为空");
+            log.error("[创建订单] : 购物车不能为空");
             throw new SellException(ResultStatus.CART_EMPTY);
         }
-        //创建订单
-        OrderDto orderDtoResult = orderService.createOrder(orderDto);
+        // 创建订单
+        OrderDto result = orderService.createOrder(orderDto);
 
-        //设置订单id并返回ResultVo对象
-        Map<String,String> map = new HashMap();
-        map.put("orderId",orderDtoResult.getOrderId());
+        // 将订单的id存入到一个map中
+        Map<String, String> map = new HashMap<>();
+        map.put("orderId", orderDto.getOrderId());
+
         return ResultVOUtil.success(map);
     }
 

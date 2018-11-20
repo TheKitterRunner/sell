@@ -1,6 +1,5 @@
 package com.xinyan.sell.service.impl;
 
-import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -19,16 +18,13 @@ import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 计算订单总额
-            totalAmount.add(productInfo.getProductPrice().multiply(
+            totalAmount = totalAmount.add(productInfo.getProductPrice().multiply(
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
@@ -122,11 +118,12 @@ public class OrderServiceImpl implements OrderService {
         //将查出来的orderDetailList设置进orderDto对象中，并返回
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
         orderDto.setOrderDetailList(orderDetailList);
+
         return orderDto;
     }
 
     /**
-     * 订单列表
+     * 查询订单列表
      * @param buyerOpenid
      * @param pageable
      * @return

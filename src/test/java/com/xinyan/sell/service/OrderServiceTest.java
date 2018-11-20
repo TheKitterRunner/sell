@@ -1,6 +1,5 @@
 package com.xinyan.sell.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.po.OrderDetail;
 import com.xinyan.sell.po.OrderMaster;
@@ -16,15 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
+/**
+ * 订单service层的测试
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderServiceTest {
@@ -41,10 +39,10 @@ public class OrderServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
-//    @Test
-//    public void createOrder() {
-//
-//    }
+
+    /**
+     * 取消订单测试
+     */
     @Test
     public void cancel(){
         //测试订单状态是否被修改
@@ -53,8 +51,6 @@ public class OrderServiceTest {
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId("96515284a3074677864a81251d6625cb");
         BeanUtils.copyProperties(orderMaster,orderDto);
         orderDto.setOrderDetailList(orderDetailList);
-//        orderDto = orderService.cancelOrder(orderDto);
-//        System.out.println(orderDto.getOrderStatus().toString());
 
         //测试库存是否被修改
         ProductInfo productInfo = productRepository.findOne("3333333333");

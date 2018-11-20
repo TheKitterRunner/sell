@@ -23,7 +23,7 @@ import java.net.URLEncoder;
  */
 @RequestMapping("/wechat")
 @Slf4j
-@RestController
+@Controller
 public class WechatController {
 
     @Autowired
@@ -34,10 +34,10 @@ public class WechatController {
      * @param returnUrl
      * @return
      */
-    @GetMapping("/authorize")
+    @RequestMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl){
         // 构造网页授权url,
-        String url = "http://q227z05133.iok.la/sell/wechat/userInfo";
+        String url = "http://227aq28234.imwork.net:35419/sell/wechat/userInfo";
 
         String redirectUrl = null;
         try {
@@ -58,9 +58,12 @@ public class WechatController {
      * @param code
      * @return
      */
-    @GetMapping("/userInfo")
-    public String userInfo(String returnUrl, String code){
+    @RequestMapping("/userInfo")
+    public String userInfo(@RequestParam("code") String code,
+                           @RequestParam("state") String returnUrl){
+
         WxMpUser wxMpUser = null;
+
         try {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken =
                     wxMpService.oauth2getAccessToken(code);
