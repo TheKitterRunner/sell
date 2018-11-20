@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Administrator
  * 转换类
+ *  2018/11/18 0018
  */
 public class OrderMasterToOrderDTOConverter {
     public OrderMasterToOrderDTOConverter() {

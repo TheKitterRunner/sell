@@ -22,10 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.spi.ResolveResult;
 import javax.validation.Valid;
@@ -130,5 +127,19 @@ public class BuyerOrderController {
         //获取resultVo对象并返回
         ResultVo resultVo = ResultVOUtil.success();
         return  resultVo;
+    }
+
+    /**
+     * 完结订单
+     * @param orderId
+     * @return
+     */
+    @PostMapping("/finish")
+    public ResultVo finish(@RequestParam("orderId") String orderId){
+        OrderMaster master = orderMasterRepository.findByOrderId(orderId);
+        OrderDto orderDto =OrderMasterToOrderDTOConverter.converter(master);
+        OrderDto finish = orderService.finishOrder(orderDto);
+        return ResultVOUtil.success(finish);
+
     }
 }

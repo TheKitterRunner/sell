@@ -1,5 +1,6 @@
 package com.xinyan.sell.service.impl;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -71,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 计算订单总额
-            totalAmount = totalAmount.add(productInfo.getProductPrice().multiply(
+            totalAmount.add(productInfo.getProductPrice().multiply(
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
@@ -172,8 +173,29 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    /**
+     * 完结订单
+     * @param orderDto
+     * @return
+     */
     @Override
-    public OrderDto finishOrder(OrderDto orderDto) {
-        return null;
+    public OrderDto finishOrder(OrderDto orderDto){
+        //查询订单状态
+        if(!orderDto.getOrderStatus().equals(OrderStatus.NEW_ORDER.getCode())){
+            log.error("【完结订单】订单状态不正确，OrderId:{}, OrderStatus:{}"
+                    ,orderDto.getOrderId(),orderDto.getOrderStatus());
+            throw new SellException(ResultStatus.ORDER_STATUS_ERROR);
+        }
+
+        //修改订单状态
+        orderDto.setOrderStatus(OrderStatus.FINISHED.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto,orderMaster);
+        OrderMaster save = orderMasterRepository.save(orderMaster);
+        if(save == null){
+            log.error("【完结订单】订单更新失败，OrderMaster:{}",orderMaster);
+            throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
+        }
+        return orderDto;
     }
 }
