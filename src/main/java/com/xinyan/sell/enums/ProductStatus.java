@@ -10,8 +10,7 @@ import lombok.Getter;
 @Getter
 public enum ProductStatus {
     UP(0, "上架"),
-    down(1, "下架")
-    ;
+    down(1, "下架");
 
     private Integer code;
     private String message;

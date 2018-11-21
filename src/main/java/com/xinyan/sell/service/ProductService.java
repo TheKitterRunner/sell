@@ -77,4 +77,26 @@ public interface ProductService {
      * @param cartDtoList
      */
     void increaseStock(List<CartDto> cartDtoList);
+
+    /*=================  卖家端   =====================*/
+
+//    /**
+//     * 商品列表分页查询
+//     * @param pageable
+//     * @return
+//     */
+//    Page<ProductInfo> findList(Pageable pageable);
+
+    /**
+     * 根据ID修改商品的状态信息
+     * @param productId
+     */
+    void updateProducrStatus(String productId);
+
+    /**
+     * 修改并保存商品
+     * @param productInfo
+     */
+    void saveUpdateProduct(ProductInfo productInfo);
+
 }

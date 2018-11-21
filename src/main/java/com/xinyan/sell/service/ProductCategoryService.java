@@ -1,7 +1,8 @@
 package com.xinyan.sell.service;
 
 import com.xinyan.sell.po.ProductCategory;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -35,4 +36,25 @@ public interface ProductCategoryService {
     ProductCategory findOne(Integer categoryId);
 
 
+    //============= 卖家端 ================
+
+    /**
+     * 类目类型的分页查询列表
+     * @param pageable
+     * @return
+     */
+    Page<ProductCategory> findList(Pageable pageable);
+
+    /**
+     * 添加类目
+     * @param productCategory
+     * @return
+     */
+    ProductCategory saveCategory(ProductCategory productCategory);
+
+    /**
+     * 修改类目
+     * @param productCategory
+     */
+    void updateProductCategory (ProductCategory productCategory);
 }
