@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class OrderDto {
 
-    @Id
+    /** 订单id */
     private String orderId;
 
     /**卖家名字*/

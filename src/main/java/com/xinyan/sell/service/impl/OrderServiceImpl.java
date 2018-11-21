@@ -1,6 +1,7 @@
 package com.xinyan.sell.service.impl;
 
 import com.sun.xml.internal.bind.v2.TODO;
+import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.enums.OrderStatus;
@@ -200,5 +201,20 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
         }
         return orderDto;
+    }
+
+    /*==================卖家端============*/
+
+    /**
+     * 查询所有订单
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<OrderDto> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
+        List<OrderDto> orderDtoList = OrderMasterToOrderDTOConverter.converter(orderMasterPage.getContent());
+        Page<OrderDto> orderDtoPage = new PageImpl<>(orderDtoList, pageable, orderMasterPage.getTotalElements());
+        return orderDtoPage;
     }
 }
