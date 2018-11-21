@@ -113,6 +113,9 @@ public class OrderServiceImpl implements OrderService {
         }
         //根据orderId查询出orderMaster对象
         OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
+        if (orderMaster == null){
+            throw new SellException(ResultStatus.ORDER_NOT_EXIST);
+        }
         OrderDto orderDto = new OrderDto();
         //将orderMaster对象的属性复制给orderDto对象
         BeanUtils.copyProperties(orderMaster, orderDto);

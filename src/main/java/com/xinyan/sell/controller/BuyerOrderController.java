@@ -87,7 +87,10 @@ public class BuyerOrderController {
      * @return
      */
     @GetMapping("/list")
-    public ResultVo list(@Param("openId") String openId, Integer page,Integer size){
+    public ResultVo list(@RequestParam("openId") String openId,
+                         @RequestParam("page") Integer page,
+                         @RequestParam("size") Integer size){
+
         PageRequest pageRequest = new PageRequest(page,size);
         //获取分页订单列表
         Page<OrderDto> orderDtoPage = orderService.findList(openId,pageRequest);
@@ -102,12 +105,17 @@ public class BuyerOrderController {
      * @return
      */
     @GetMapping("/detail")
-    public ResultVo getDetail(@Param("orderId") String orderId){
-        //获取orderDto对象
-        OrderDto orderDto = orderService.findOne(orderId);
-        //获取resultVO对象并返回
-        ResultVo resultVo = ResultVOUtil.success(orderDto);
-        return  resultVo;
+    public ResultVo getDetail(@RequestParam("orderId") String orderId){
+        try {
+            //获取orderDto对象
+            OrderDto orderDto = orderService.findOne(orderId);
+            //获取resultVO对象并返回
+            ResultVo resultVo = ResultVOUtil.success(orderDto);
+            return  resultVo;
+        } catch (SellException s){
+            log.error("[订单不存在], orderId :" + orderId);
+        }
+        return null;
     }
 
     /**
@@ -116,7 +124,7 @@ public class BuyerOrderController {
      * @return
      */
     @PostMapping("/cancel")
-    public ResultVo cancel(String orderId){
+    public ResultVo cancel(@RequestParam("orderId") String orderId){
         //查询出orderMaster对象并转换为orderDto对象
         OrderMaster orderMaster = orderMasterRepository.findOne(orderId);
         OrderDto orderDto = OrderMasterToOrderDTOConverter.converter(orderMaster);
@@ -136,10 +144,13 @@ public class BuyerOrderController {
      */
     @PostMapping("/finish")
     public ResultVo finish(@RequestParam("orderId") String orderId){
-        OrderMaster master = orderMasterRepository.findByOrderId(orderId);
-        OrderDto orderDto =OrderMasterToOrderDTOConverter.converter(master);
-        OrderDto finish = orderService.finishOrder(orderDto);
-        return ResultVOUtil.success(finish);
+        // 根据orderID查询出orderMaster
+        OrderMaster orderMaster = orderMasterRepository.findByOrderId(orderId);
+        // 将ordermaster转换为orderDto
+        OrderDto orderDto =OrderMasterToOrderDTOConverter.converter(orderMaster);
+        // 调用完结订单的方法,返回更改状态后的orderDto
+        OrderDto finishOrderDto = orderService.finishOrder(orderDto);
+        return ResultVOUtil.success(finishOrderDto);
 
     }
 }

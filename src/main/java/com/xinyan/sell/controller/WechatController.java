@@ -29,15 +29,34 @@ public class WechatController {
     @Autowired
     private WxMpService wxMpService;
 
+    /*
+    * 第一步：用户同意授权，获取code
+    * 第二步：通过code换取网页授权access_token
+    * 第三步：刷新access_token（如果需要）
+    * 第四步：拉取用户信息(需scope为 snsapi_userinfo)
+    */
     /**
-     * 返回带 code 和 state 的 Url
+     * 返回带 code 和 state 的 url
+     * code说明 ： code作为换取access_token的票据，每次用户授权带上的code将不一样，
+     *  code只能使用一次，5分钟未被使用自动过期。
      * @param returnUrl
      * @return
      */
     @RequestMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl){
         // 构造网页授权url,
-        String url = "http://227aq28234.imwork.net:35419/sell/wechat/userInfo";
+        String url = "http://227aq28234.imwork.net:36320/sell/wechat/userInfo";
+
+        //oauth2buildAuthorizationUrl 方法，用于返回一个
+        //三个参数说明：
+        //url：用户授权的url，点击后会重定向并带上 code 和 state 参数
+        // scope: 应用授权作用域
+        // snsapi_base: 不弹出授权页面，直接跳转，只能获取用户openid
+        // snsapi_userinfo: 弹出授权页面，可通过openid拿到昵称、性别、所在地。
+        //并且， 即使在未关注的情况下，只要用户授权，也能获取其信息
+        //state: 重定向后会带上state参数
+        //redirectUrl: 授权后重定向的回调链接地址
+        //注意：跳转回调redirect_uri，应当使用https链接来确保授权code的安全性。
 
         String redirectUrl = null;
         try {
@@ -77,6 +96,6 @@ public class WechatController {
 
         String openId = wxMpUser.getOpenId();
 
-        return "redirect :" + returnUrl + "?openId" + openId;
+        return "redirect :" + returnUrl + "?openId=" + openId;
     }
 }
