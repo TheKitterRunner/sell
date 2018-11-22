@@ -69,7 +69,7 @@
                                             <td>${orderDTO.createTime}</td>
                                             <td>
                                                 <a class="btn btn-sm btn-outline-info" href="${basePath}/seller/order/detail?orderId=${orderDTO.orderId}">详情</a>
-                                                <#if orderDTO.orderStatus == 0>
+                                                <#if orderDTO.orderStatus == "新订单">
                                                 <a class="btn btn-sm btn-outline-danger" href="${basePath}/seller/order/cancel?orderId=${orderDTO.orderId}">取消</a>
                                                 </#if>
                                             </td>

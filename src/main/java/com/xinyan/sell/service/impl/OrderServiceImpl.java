@@ -4,6 +4,7 @@ import com.sun.xml.internal.bind.v2.TODO;
 import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
+import com.xinyan.sell.dto.OrderDtoTO;
 import com.xinyan.sell.enums.OrderStatus;
 import com.xinyan.sell.enums.PayStatus;
 import com.xinyan.sell.enums.ResultStatus;
@@ -20,13 +21,12 @@ import com.xinyan.sell.utils.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -206,15 +206,64 @@ public class OrderServiceImpl implements OrderService {
     /*==================卖家端============*/
 
     /**
-     * 查询所有订单
+     * 查询所有订单(分页)
      * @param pageable
      * @return
      */
     @Override
-    public Page<OrderDto> findList(Pageable pageable) {
+    public Page<OrderDtoTO> findList(Pageable pageable) {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
-        List<OrderDto> orderDtoList = OrderMasterToOrderDTOConverter.converter(orderMasterPage.getContent());
-        Page<OrderDto> orderDtoPage = new PageImpl<>(orderDtoList, pageable, orderMasterPage.getTotalElements());
+        List<OrderDtoTO> orderDTOVOS = new ArrayList<>();
+
+        //此处将支付状态与订单状态替换
+        for(OrderMaster orderMaster : orderMasterPage){
+            OrderDtoTO orderDtoTO = new OrderDtoTO();
+            BeanUtils.copyProperties(orderMaster,orderDtoTO);
+
+            if(orderDtoTO.getOrderId().equals(orderMaster.getOrderId())){
+                int orderStatus = orderMaster.getOrderStatus();
+                switch (orderStatus){
+                    case 0:
+                        orderDtoTO.setOrderStatus(OrderStatus.NEW_ORDER.getMessage());
+                        break;
+                    case 1:
+                        orderDtoTO.setOrderStatus(OrderStatus.FINISHED.getMessage());
+                        break;
+                    case 2:
+                        orderDtoTO.setOrderStatus(OrderStatus.CANCEL.getMessage());
+                        break;
+                }
+            }
+            if(orderDtoTO.getOrderId().equals(orderMaster.getOrderId())){
+                int payStatus = orderMaster.getPayStatus();
+                switch (payStatus){
+                    case 0:
+                        orderDtoTO.setPayStatus(PayStatus.WAIT.getMessage());
+                        break;
+                    case 1:
+                        orderDtoTO.setPayStatus(PayStatus.FINISHED.getMessage());
+                        break;
+                }
+            }
+            orderDTOVOS.add(orderDtoTO);
+        }
+        Page<OrderDtoTO> orderDtoPage = new PageImpl<>(orderDTOVOS, pageable, orderMasterPage.getTotalElements());
         return orderDtoPage;
     }
+
+
+
+    /**
+     *  完结订单
+     * @param orderDto
+     * @return
+     */
+    public OrderDto finish(OrderDto orderDto){
+        orderDto.setOrderStatus(OrderStatus.FINISHED.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto, orderMaster);
+        orderMasterRepository.save(orderMaster);
+        return orderDto;
+    }
+
 }

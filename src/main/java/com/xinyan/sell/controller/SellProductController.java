@@ -79,7 +79,7 @@ public class SellProductController {
      */
     @GetMapping("/list")
     public String list(@RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                       @RequestParam(value = "size",required = false,defaultValue = "5")Integer size,
+                       @RequestParam(value = "size",required = false,defaultValue = "5") Integer size,
                        Map<String,Object> map, Map<String,Object> categoryMap, Model model){
         //创建一个空分页对象，运用方法查询数据库放入分页对象中
         PageRequest pageRequest = new PageRequest(page - 1 ,size);

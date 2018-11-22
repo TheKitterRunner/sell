@@ -2,6 +2,7 @@ package com.xinyan.sell.service;
 
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.po.OrderMaster;
+import com.xinyan.sell.dto.OrderDtoTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,6 +31,11 @@ public interface OrderService {
 
     /*==================卖家端============*/
     // 查询所有订单
-    Page<OrderDto> findList(Pageable pageable);
+    //Page<OrderDto> findList(Pageable pageable);
 
+    //完结订单
+    OrderDto finish(OrderDto orderDto);
+
+    //订单查询(分页)
+    Page<OrderDtoTO> findList(Pageable pageable);
 }

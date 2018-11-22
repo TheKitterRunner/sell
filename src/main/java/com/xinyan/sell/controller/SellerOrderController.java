@@ -1,6 +1,7 @@
 package com.xinyan.sell.controller;
 
 import com.xinyan.sell.dto.OrderDto;
+import com.xinyan.sell.dto.OrderDtoTO;
 import com.xinyan.sell.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-
+/**
+ * 买家端订单管理的Controller
+ */
 @RequestMapping("/seller/order")
 @Controller
 public class SellerOrderController {
@@ -33,7 +36,7 @@ public class SellerOrderController {
                        @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                        Map<String, Object> map){
         PageRequest pageRequest = new PageRequest(page - 1, size);
-        Page<OrderDto> orderDtoPage = orderService.findList(pageRequest);
+        Page<OrderDtoTO> orderDtoPage = orderService.findList(pageRequest);
 
         map.put("orderDtoPage",orderDtoPage);
 
@@ -49,10 +52,36 @@ public class SellerOrderController {
     @GetMapping("/detail")
     public String detail(@RequestParam("orderId") String orderId,
                          Map<String, Object> map){
-        //根据
+        //根据orderId 获取订单详情
         OrderDto orderDto = orderService.findOne(orderId);
         map.put("orderDto", orderDto);
 
         return "order/detail";
     }
+
+    /**
+     * 完结订单(更改订单状态信息)
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/finish")
+    public String finish(@RequestParam("orderId") String orderId){
+        OrderDto orderDto = orderService.findOne(orderId);
+        orderService.finish(orderDto);
+        return "redirect:list";
+    }
+
+
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/cancel")
+    public String updateOrderMasterStatusByIdCancel(@RequestParam("orderId") String orderId){
+        OrderDto orderDto = orderService.findOne(orderId);
+        orderService.cancelOrder(orderDto);
+        return "redirect:list";
+    }
+
 }
