@@ -29,7 +29,7 @@ public class SellerOrderController {
      * @return
      */
     @GetMapping("/list")
-    public String list(@RequestParam(value = "Page", required = false, defaultValue = "1") Integer page,
+    public String list(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                        @RequestParam(value = "size", required = false, defaultValue = "5") Integer size,
                        Map<String, Object> map){
         PageRequest pageRequest = new PageRequest(page - 1, size);

@@ -58,7 +58,7 @@
                                             <td>${productCategory.categoryName}</td>
                                             <td>${productCategory.categoryType}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/category/updateCategoryPage?categoryId=${productCategory.categoryId}">修改</a>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/seller/category/updateCategoryPage?categoryId=${productCategory.categoryId}">修改</a>
                                             </td>
                                         </tr>
                                         </#list>
@@ -66,43 +66,43 @@
                                 </table>
                                 <!-- 分页 -->
                                 <ul class="pagination float-right">
-                                        <#if productCategoryPage.first>
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number}">
-                                                上一页
-                                            </a>
-                                        </li>
+                                    <#if productCategoryPage.first>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${productCategoryPage.number}">
+                                            上一页
+                                        </a>
+                                    </li>
+                                    <#else>
+                                    <li class="page-item">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${productCategoryPage.number}" aria-label="Previous">
+                                            上一页
+                                        </a>
+                                    </li>
+                                    </#if>
+                                    <#list 1..productCategoryPage.totalPages as index>
+                                        <#if productCategoryPage.number == (index - 1)>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${index}">${index}</a>
+                                    </li>
                                         <#else>
-                                        <li class="page-item">
-                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number}" aria-label="Previous">
-                                                上一页
-                                            </a>
-                                        </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${index}">${index}</a>
+                                    </li>
                                         </#if>
-                                        <#list 1..productCategoryPage.totalPages as index>
-                                            <#if productCategoryPage.number == (index - 1)>
-                                        <li class="page-item active">
-                                            <a class="page-link" href="${basePath}/category/list?page=${index}">${index}</a>
-                                        </li>
-                                            <#else>
-                                        <li class="page-item">
-                                            <a class="page-link" href="${basePath}/category/list?page=${index}">${index}</a>
-                                        </li>
-                                            </#if>
-                                        </#list>
-                                        <#if productCategoryPage.last>
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number+1}" aria-label="Next">
-                                                下一页
-                                            </a>
-                                        </li>
-                                        <#else>
-                                        <li class="page-item">
-                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number+2}" aria-label="Next">
-                                                下一页
-                                            </a>
-                                        </li>
-                                        </#if>
+                                    </#list>
+                                    <#if productCategoryPage.last>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${productCategoryPage.number+1}" aria-label="Next">
+                                            下一页
+                                        </a>
+                                    </li>
+                                    <#else>
+                                    <li class="page-item">
+                                        <a class="page-link" href="${basePath}/seller/category/list?page=${productCategoryPage.number+2}" aria-label="Next">
+                                            下一页
+                                        </a>
+                                    </li>
+                                    </#if>
                                 </ul>
                             </div>
                         </div>

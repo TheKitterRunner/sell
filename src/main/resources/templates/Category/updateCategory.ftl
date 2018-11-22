@@ -38,21 +38,27 @@
 
         <p>&nbsp;</p>
 
-        <form action="${basePath}/category/updateCategory" cla ss="form-horizontal" method="post" >
-                <div class="controls">
-                    <input id="categoryId" name="categoryId" value="${productCategory.categoryId}" type="hidden" />
-                    <div class="control-group"><label class="control-label">类目名称</label>
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <form action="${basePath}/seller/category/updateCategory" cla ss="form-horizontal" method="post" >
                         <div class="controls">
-                            <input id="categoryName" name="categoryName" type="text" value="${productCategory.categoryName}" /></div>
-                    </div>
-                </div>
-            <div class="control-group"><label class="control-label">类目类型</label>
-                <div class="controls">
-                    <input id="categoryType" name="categoryType" type="text" value="${productCategory.categoryType}" />
+                            <input id="categoryId" name="categoryId" value="${productCategory.categoryId}" type="hidden" />
+                            <div class="control-group"><label class="control-label"><strong>类目名称</strong></label>
+                                <div class="controls"><input id="categoryName" name="categoryName" type="text" value="${productCategory.categoryName}" /></div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="control-group"><label class="control-label"><strong>类目类型</strong></label>
+                            <div class="controls"><input id="categoryType" name="categoryType" type="text" value="${productCategory.categoryType}" />
+                            </div>
+                        </div>
+                        <br>
+                        <div class="controls"><button class="btn btn-primary" name="signup" type="submit" value="Sign up">保存提交</button></div>
+                    </form>
                 </div>
             </div>
-            <div class="controls"><button class="btn btn-primary" name="signup" type="submit" value="Sign up">保存提交</button></div>
-        </form>
+        </div>
     </div>
 </div>
 

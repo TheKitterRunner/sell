@@ -78,12 +78,12 @@
                                             <td name="createTime">${productInfo.createTime}</td>
                                             <td>
                                                 <#if productInfo.productStatus == 1>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/product/detail?productId=${productInfo.productId}">上架</a>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/sell/product/detail?productId=${productInfo.productId}">上架</a>
                                                 </#if>
                                                 <#if productInfo.productStatus == 0>
-                                                <a class="btn btn-sm btn-outline-danger" href="${basePath}/product/cancel?productId=${productInfo.productId}">下架</a>
+                                                <a class="btn btn-sm btn-outline-danger" href="${basePath}/seller/product/cancel?productId=${productInfo.productId}">下架</a>
                                                 </#if>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/product/updateProductPage?productId=${productInfo.productId}">修改</a>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/sell/product/updateProductPage?productId=${productInfo.productId}">修改</a>
                                             </td>
                                         </tr>
                                         </#list>
@@ -93,13 +93,13 @@
                                 <ul class="pagination float-right">
                                         <#if productInfoPage.first>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/product/list?page=${productInfoPage.number}">
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${productInfoPage.number}">
                                                 上一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/product/list?page=${productInfoPage.number}" aria-label="Previous">
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${productInfoPage.number}" aria-label="Previous">
                                                 上一页
                                             </a>
                                         </li>
@@ -107,23 +107,23 @@
                                         <#list 1..productInfoPage.totalPages as index>
                                             <#if productInfoPage.number == (index - 1)>
                                         <li class="page-item active">
-                                            <a class="page-link" href="${basePath}/product/list?page=${index}">${index}</a>
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${index}">${index}</a>
                                         </li>
                                             <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/product/list?page=${index}">${index}</a>
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${index}">${index}</a>
                                         </li>
                                             </#if>
                                         </#list>
                                         <#if productInfoPage.last>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/product/list?page=${productInfoPage.number+1}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${productInfoPage.number+1}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/product/list?page=${productInfoPage.number+2}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/seller/product/list?page=${productInfoPage.number+2}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>

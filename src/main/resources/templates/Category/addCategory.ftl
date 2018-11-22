@@ -40,7 +40,7 @@
         <div class="container">
             <div class="row">
                 <div class="span12">
-                    <form class="form-horizontal" action="${basePath}/category/doAddCategory" method="post" >
+                    <form class="form-horizontal" action="${basePath}/seller/category/doAddCategory" method="post" >
                         <div class="control-group">
                             <label class="control-label" for="categoryName">类目名称</label>
                             <input id="categoryName" name="categoryName" type="text" />

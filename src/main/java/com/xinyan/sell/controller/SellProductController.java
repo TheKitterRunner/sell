@@ -21,7 +21,7 @@ import java.util.Map;
  * 卖家端的Controller
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping("seller/product")
 public class SellProductController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class SellProductController {
                              @RequestParam(value = "size",required = false,defaultValue = "5")Integer size,
                              Map<String,Object> map){
         //通过方法查找类目的列表放入map集合提供给页面使用
-        PageRequest pageRequest = new PageRequest(page -1 ,size);
+        PageRequest pageRequest = new PageRequest(page - 1 ,size);
         Page<ProductCategory> productCategoryPage = productCategoryService.findList(pageRequest);
         map.put("productCategoryPage",productCategoryPage);
         return "Product/addProduct";
@@ -82,7 +82,7 @@ public class SellProductController {
                        @RequestParam(value = "size",required = false,defaultValue = "5")Integer size,
                        Map<String,Object> map, Map<String,Object> categoryMap, Model model){
         //创建一个空分页对象，运用方法查询数据库放入分页对象中
-        PageRequest pageRequest = new PageRequest(page -1 ,size);
+        PageRequest pageRequest = new PageRequest(page - 1 ,size);
         Page<ProductInfo> productInfoPage = productService.findAll(pageRequest);
         Page<ProductCategory> productCategoryPage = productCategoryService.findList(pageRequest);
         categoryMap.put("productCategoryPage",productCategoryPage);

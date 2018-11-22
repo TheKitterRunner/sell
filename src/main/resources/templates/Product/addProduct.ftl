@@ -36,11 +36,10 @@
         <!-- 页面主体信息 -->
         <p>&nbsp;</p>
 
-        <p>&nbsp;</p>
         <div class="container">
             <div class="row">
                 <div class="span12">
-                    <form class="form-horizontal" action="${basePath}/product/doAdd" method="post" >
+                    <form class="form-horizontal" action="${basePath}/seller/product/doAdd" method="post" >
                         <div class="control-group">
                             <label class="control-label" for="productName">商品名称</label>
                                 <input id="productName" name="productName" type="text" />
@@ -85,7 +84,8 @@
                                 <br>
                             </div>
                         </div>
-                        <button type="submit" class="btn" style="align-content: center">添加商品</button>
+                        <br>
+                        <div class="controls"><button class="btn btn-primary" name="signup" type="submit" value="Sign up">添加商品</button></div>
                     </form>
                 </div>
             </div>

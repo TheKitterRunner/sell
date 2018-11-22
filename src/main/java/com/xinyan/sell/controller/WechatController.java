@@ -42,23 +42,13 @@ public class WechatController {
      * @param returnUrl
      * @return
      */
-    @RequestMapping("/authorize")
+    @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl){
         // 构造网页授权url,
         String url = "http://227aq28234.imwork.net:36320/sell/wechat/userInfo";
 
-        //oauth2buildAuthorizationUrl 方法，用于返回一个
-        //三个参数说明：
-        //url：用户授权的url，点击后会重定向并带上 code 和 state 参数
-        // scope: 应用授权作用域
-        // snsapi_base: 不弹出授权页面，直接跳转，只能获取用户openid
-        // snsapi_userinfo: 弹出授权页面，可通过openid拿到昵称、性别、所在地。
-        //并且， 即使在未关注的情况下，只要用户授权，也能获取其信息
-        //state: 重定向后会带上state参数
-        //redirectUrl: 授权后重定向的回调链接地址
-        //注意：跳转回调redirect_uri，应当使用https链接来确保授权code的安全性。
-
         String redirectUrl = null;
+
         try {
             redirectUrl = wxMpService.oauth2buildAuthorizationUrl(
                     url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl, "utf-8"));
@@ -77,7 +67,7 @@ public class WechatController {
      * @param code
      * @return
      */
-    @RequestMapping("/userInfo")
+    @GetMapping("/userInfo")
     public String userInfo(@RequestParam("code") String code,
                            @RequestParam("state") String returnUrl){
 
