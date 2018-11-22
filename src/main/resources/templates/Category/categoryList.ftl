@@ -16,7 +16,7 @@
         <div class="page-breadcrumb">
             <div class="row">
                 <div class="col-5 align-self-center">
-                    <h4 class="page-title">订单管理</h4>
+                    <h4 class="page-title">商品管理</h4>
                     <div class="d-flex align-items-center"></div>
                 </div>
                 <div class="col-7 align-self-center">
@@ -40,38 +40,25 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">订单列表</h4>
+                            <h4 class="card-title">类目类型列表</h4>
                             <div class="table-responsive">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th class="text-center">订单ID</th>
-                                        <th class="text-center">姓名</th>
-                                        <th class="text-center">手机号</th>
-                                        <th class="text-center">地址</th>
-                                        <th class="text-center">金额</th>
-                                        <th class="text-center">订单状态</th>
-                                        <th class="text-center">支付状态</th>
-                                        <th class="text-center">创建时间</th>
+                                        <th class="text-center">类目ID</th>
+                                        <th class="text-center">类目名称</th>
+                                        <th class="text-center">类目编号</th>
                                         <th class="text-center">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <#list orderDtoPage.content as orderDTO >
+                                        <#list productCategoryPage.content as productCategory >
                                         <tr>
-                                            <td>${orderDTO.orderId}</td>
-                                            <td>${orderDTO.buyerName}</td>
-                                            <td>${orderDTO.buyerPhone}</td>
-                                            <td>${orderDTO.buyerAddress}</td>
-                                            <td>${orderDTO.orderAmount}</td>
-                                            <td>${orderDTO.orderStatus}</td>
-                                            <td>${orderDTO.payStatus}</td>
-                                            <td>${orderDTO.createTime}</td>
+                                            <td>${productCategory.categoryId}</td>
+                                            <td>${productCategory.categoryName}</td>
+                                            <td>${productCategory.categoryType}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/seller/order/detail?orderId=${orderDTO.orderId}">详情</a>
-                                                <#if orderDTO.orderStatus == "新订单">
-                                                <a class="btn btn-sm btn-outline-danger" href="${basePath}/seller/order/cancel?orderId=${orderDTO.orderId}">取消</a>
-                                                </#if>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/category/updateCategoryPage?categoryId=${productCategory.categoryId}">修改</a>
                                             </td>
                                         </tr>
                                         </#list>
@@ -79,39 +66,39 @@
                                 </table>
                                 <!-- 分页 -->
                                 <ul class="pagination float-right">
-                                        <#if orderDtoPage.first>
+                                        <#if productCategoryPage.first>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number}">
+                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number}">
                                                 上一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number}" aria-label="Previous">
+                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number}" aria-label="Previous">
                                                 上一页
                                             </a>
                                         </li>
                                         </#if>
-                                        <#list 1..orderDtoPage.totalPages as index>
-                                            <#if orderDtoPage.number == (index - 1)>
+                                        <#list 1..productCategoryPage.totalPages as index>
+                                            <#if productCategoryPage.number == (index - 1)>
                                         <li class="page-item active">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${index}">${index}</a>
+                                            <a class="page-link" href="${basePath}/category/list?page=${index}">${index}</a>
                                         </li>
                                             <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${index}">${index}</a>
+                                            <a class="page-link" href="${basePath}/category/list?page=${index}">${index}</a>
                                         </li>
                                             </#if>
                                         </#list>
-                                        <#if orderDtoPage.last>
+                                        <#if productCategoryPage.last>
                                         <li class="page-item disabled">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number+1}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number+1}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>
                                         <#else>
                                         <li class="page-item">
-                                            <a class="page-link" href="${basePath}/seller/order/list?page=${orderDtoPage.number+2}" aria-label="Next">
+                                            <a class="page-link" href="${basePath}/category/list?page=${productCategoryPage.number+2}" aria-label="Next">
                                                 下一页
                                             </a>
                                         </li>

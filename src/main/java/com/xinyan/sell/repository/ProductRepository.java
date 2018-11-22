@@ -23,4 +23,6 @@ public interface ProductRepository extends JpaRepository<ProductInfo, String > {
      * 根据商品的id 的集合查询
      */
     List<ProductInfo> findByProductIdIn(List<String> productIdList);
+
+
 }

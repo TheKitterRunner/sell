@@ -25,15 +25,15 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="javascript:void(0)" class="sidebar-link">
+                            <a href="${basePath}/product/list" class="sidebar-link">
                                 <i class="icon-Record"></i>
                                 <span class="hide-menu"> 列表 </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="javascript:void(0)" class="sidebar-link">
+                            <a href="${basePath}/product/addProductPage" class="sidebar-link" >
                                 <i class="icon-Record"></i>
-                                <span class="hide-menu"> 新增 </span>
+                                <span class="hide-menu" > 新增 </span>
                             </a>
                         </li>
                     </ul>
@@ -46,13 +46,13 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="javascript:void(0)" class="sidebar-link">
+                            <a href="${basePath}/category/list" class="sidebar-link">
                                 <i class="mdi mdi-book-multiple"></i>
                                 <span class="hide-menu"> 列表 </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="javascript:void(0)" class="sidebar-link">
+                            <a href="${basePath}/category/addCategoryPage" class="sidebar-link">
                                 <i class="mdi mdi-book-plus"></i>
                                 <span class="hide-menu"> 新增 </span>
                             </a>

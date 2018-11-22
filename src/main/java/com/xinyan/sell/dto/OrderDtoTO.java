@@ -3,7 +3,6 @@ package com.xinyan.sell.dto;
 import com.xinyan.sell.po.OrderDetail;
 import lombok.Data;
 
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  * 订单信息传输的类(用于在Controller层和Service层)
  */
 @Data
-public class OrderDto {
+public class OrderDtoTO {
 
     /** 订单id */
     private String orderId;
@@ -36,10 +35,10 @@ public class OrderDto {
     private BigDecimal orderAmount;
 
     /**订单状态 默认为下单状态*/
-    private Integer orderStatus = 1;
+    private String orderStatus = "已完结";
 
     /**支付状态 默认支付状态*/
-    private Integer payStatus = 1;
+    private String payStatus = "已支付";
 
     /**创建时间*/
     private Date createTime;

@@ -37,10 +37,10 @@ public class ProductInfo {
     /** 图片 */
     private String productIcon;
 
-    /** 状态 */
+    /** 状态  0:上架 1下架 */
     private Integer productStatus = 0;
 
-    /** 类目类型  0:上架 1下架 */
+    /** 类目类型   */
     private Integer categoryType;
 
     /** 创建时间 */
