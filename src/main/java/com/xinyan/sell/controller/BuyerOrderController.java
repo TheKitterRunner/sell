@@ -81,19 +81,19 @@ public class BuyerOrderController {
 
     /**
      * 查询订单列表
-     * @param openId
+     * @param openid
      * @param page
      * @param size
      * @return
      */
     @GetMapping("/list")
-    public ResultVo list(@RequestParam("openId") String openId,
+    public ResultVo list(@RequestParam("openid") String openid,
                          @RequestParam("page") Integer page,
                          @RequestParam("size") Integer size){
 
         PageRequest pageRequest = new PageRequest(page,size);
         //获取分页订单列表
-        Page<OrderDto> orderDtoPage = orderService.findList(openId,pageRequest);
+        Page<OrderDto> orderDtoPage = orderService.findList(openid,pageRequest);
         //获取resultVo对象并返回
         ResultVo resultVo = ResultVOUtil.success(orderDtoPage.getContent());
         return  resultVo;

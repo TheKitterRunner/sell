@@ -7,10 +7,14 @@ spring:
 
   jpa:
     show-sql: true
+
   freemarker:
     request-context-attribute: request
     expose-request-attributes: true
     suffix: .ftl
+    settings:
+      auto_import: /spring.ftl as spring
+
 server:
   context-path: /sell
 

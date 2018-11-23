@@ -78,12 +78,12 @@
                                             <td name="createTime">${productInfo.createTime}</td>
                                             <td>
                                                 <#if productInfo.productStatus == 1>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/sell/product/detail?productId=${productInfo.productId}">上架</a>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/seller/product/detail?productId=${productInfo.productId}">上架</a>
                                                 </#if>
                                                 <#if productInfo.productStatus == 0>
                                                 <a class="btn btn-sm btn-outline-danger" href="${basePath}/seller/product/cancel?productId=${productInfo.productId}">下架</a>
                                                 </#if>
-                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/sell/product/updateProductPage?productId=${productInfo.productId}">修改</a>
+                                                <a class="btn btn-sm btn-outline-info" href="${basePath}/seller/product/updateProductPage?productId=${productInfo.productId}">修改</a>
                                             </td>
                                         </tr>
                                         </#list>

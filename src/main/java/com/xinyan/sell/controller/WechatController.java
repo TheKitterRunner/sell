@@ -1,7 +1,5 @@
 package com.xinyan.sell.controller;
 
-import com.xinyan.sell.enums.ResultStatus;
-import com.xinyan.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -29,63 +28,66 @@ public class WechatController {
     @Autowired
     private WxMpService wxMpService;
 
-    /*
-    * 第一步：用户同意授权，获取code
-    * 第二步：通过code换取网页授权access_token
-    * 第三步：刷新access_token（如果需要）
-    * 第四步：拉取用户信息(需scope为 snsapi_userinfo)
-    */
     /**
-     * 返回带 code 和 state 的 url
-     * code说明 ： code作为换取access_token的票据，每次用户授权带上的code将不一样，
-     *  code只能使用一次，5分钟未被使用自动过期。
-     * @param returnUrl
-     * @return
+     * 1).用户同意授权，获取code
+     * 2).通过code获取网页授权access_token
+     * 3).刷新access_token(如果需要)
+     * 4).拉取用户信息(scope 为 snsapi_userinfo)
      */
     @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl){
-        // 构造网页授权url,
+
+        //构造网页授权url，然后构成超链接让用户点击重定向的url地址
         String url = "http://227aq28234.imwork.net:36320/sell/wechat/userInfo";
 
-        String redirectUrl = null;
 
+        /**
+         * oauth2buildAuthorizationUrl
+         * url:用户授权的url，点击后会重定向并带上code 和 state 参数
+         * scope:应用授权作用域
+         *      snsapi_base:不弹出授权页面，直接跳转，只能获取用户openID
+         *      snsapi_userinfo:弹出授权页面，可通过openid拿到用户昵称、性别、所在地
+         *      且在未关注的情况下只要用户授权也能获取其信息
+         * state:重定向会带上state参数
+         */
+        //redirectUrl:授权后重定向的回调连接地址
+        //跳转回调redirect_uri,应当使用https链接来确保code的安全性
+        String redirectUrl = null;
         try {
-            redirectUrl = wxMpService.oauth2buildAuthorizationUrl(
-                    url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl, "utf-8"));
+            redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url,
+                    WxConsts.OAuth2Scope.SNSAPI_USERINFO,
+                    URLEncoder.encode(returnUrl,"utf-8"));
         }catch (UnsupportedEncodingException e){
-            log.error("[微信网页授权]获取code, redirectUrl:{}", redirectUrl);
-            throw new SellException(ResultStatus.WECHAT_MP_AUTHORIZE_ERROR);
+            log.error("【微信网页授权】获取code, redirectUrl:{}",redirectUrl);
         }
 
-        return "redirect : " + redirectUrl;
+        return  "redirect:" + redirectUrl;
+
+
     }
 
-    /**
-     * 返回带openid的Url
-     * openid : 是微信用户在商户端对应的APPId下的唯一标识
-     * @param returnUrl
-     * @param code
-     * @return
-     */
     @GetMapping("/userInfo")
     public String userInfo(@RequestParam("code") String code,
-                           @RequestParam("state") String returnUrl){
+                           @RequestParam("state") String returnUrl,
+                           HttpServletResponse response){
+
 
         WxMpUser wxMpUser = null;
 
-        try {
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken =
-                    wxMpService.oauth2getAccessToken(code);
-            // 获取用户基本信息
+        try{
+            //当用户同意授权后，会回调所设置的url并把authorization code 传过来
+            //然后用这个code获得access_token 其中包含用户的openid等信息
+            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+            //获取用户基本信息
             wxMpUser = wxMpService.oauth2getUserInfo(wxMpOAuth2AccessToken,null);
-        } catch (WxErrorException e){
-            log.error("[微信网页授权]{}" , e);
-            throw new SellException(ResultStatus.WECHAT_MP_AUTHORIZE_ERROR.getCode(),
-                    e.getError().getErrorMsg());
+        }catch (WxErrorException e){
+            log.error("【微信网页授权】{}", e);
         }
 
+        //获取用户openId
         String openId = wxMpUser.getOpenId();
 
-        return "redirect :" + returnUrl + "?openId=" + openId;
+        return "redirect:http://227aq28234.imwork.net:36320/#/?openid="+openId;
+
     }
 }

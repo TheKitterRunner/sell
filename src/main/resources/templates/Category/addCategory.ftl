@@ -51,7 +51,7 @@
                             <input id="categoryType" name="categoryType" type="text" />
                         </div>
                         <br>
-                        <center><button type="submit" class="btn" style="align-content: center">添加类目</button></center>
+                        <center><button class="btn btn-primary" name="signup" type="submit" value="Sign up">添加类目</button></center>
                     </form>
                 </div>
             </div>

@@ -21,7 +21,7 @@ import java.util.Map;
  * 卖家端的Controller
  */
 @Controller
-@RequestMapping("seller/product")
+@RequestMapping("/seller/product")
 public class SellProductController {
 
     @Autowired
@@ -100,7 +100,7 @@ public class SellProductController {
         //获得一个productId
         productInfo.setProductId(KeyUtil.generatedUniqueKey());
         productService.saveProduct(productInfo);
-        return "redirect:/product/list";
+        return "redirect:/seller/product/list";
     }
 
     /**
@@ -113,7 +113,7 @@ public class SellProductController {
         //调用修改方法
         productService.saveUpdateProduct(productInfo);
 
-        return "redirect:/product/list";
+        return "redirect:/seller/product/list";
     }
 
     /**
@@ -124,7 +124,7 @@ public class SellProductController {
     @GetMapping("/detail")
     public String detail(String productId){
         productService.updateProducrStatus(productId);
-        return "redirect:/product/list";
+        return "redirect:/seller/product/list";
     }
 
     /**
@@ -135,6 +135,6 @@ public class SellProductController {
     @GetMapping("/cancel")
     public String cancel(String productId){
         productService.updateProducrStatus(productId);
-        return "redirect:/product/list";
+        return "redirect:/seller/product/list";
     }
 }

@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 3061
@@ -15,7 +17,7 @@ import javax.persistence.Id;
 @DynamicUpdate
 @Entity
 @Data
-public class ProductCategory {
+public class ProductCategory implements Serializable {
 
     @Id
     @GeneratedValue
@@ -23,8 +25,10 @@ public class ProductCategory {
     private Integer categoryId;
 
     /** 类目名称 */
+    @NotNull
     private String categoryName;
 
     /** 类目编号 */
+    @NotNull
     private Integer categoryType;
 }

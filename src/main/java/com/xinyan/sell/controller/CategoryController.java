@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Map;
  * 2018/11/18 0018
  */
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/seller/category")
 public class CategoryController {
 
     @Autowired
@@ -77,9 +78,9 @@ public class CategoryController {
      * @return
      */
     @PostMapping("/doAddCategory")
-    public String addCategory(ProductCategory productCategory) {
+    public String addCategory(@Valid ProductCategory productCategory) {
         productCategoryService.saveCategory(productCategory);
-        return "redirect:/category/list";
+        return "redirect:list";
     }
 
     /**
@@ -90,6 +91,6 @@ public class CategoryController {
     @PostMapping("/updateCategory")
     public String updateCategory(ProductCategory productCategory){
         productCategoryService.updateProductCategory(productCategory);
-        return "redirect:/category/list";
+        return "redirect:/seller/category/list";
     }
 }
