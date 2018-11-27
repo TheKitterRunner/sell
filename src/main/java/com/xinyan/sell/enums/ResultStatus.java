@@ -31,7 +31,11 @@ public enum ResultStatus {
 
     WECHAT_MP_ERROR(40,"微信公众号异常"),
     WECHAT_MP_AUTHORIZE_ERROR(41,"微信公众号授权异常"),
-    WECHAT_MP_PAY_NOTIFY_MONEY_ERROR(42,"微信支付异步通知金额错误");
+    WECHAT_MP_PAY_NOTIFY_MONEY_ERROR(42,"微信支付异步通知金额错误"),
+
+    LOGIN_FAILED(50, "登录失败, 登录信息不正确"),
+    LOGOUT_SUCCESS(51, "登出成功"),
+    ;
 
     private Integer code;
     private String message;

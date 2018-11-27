@@ -26,8 +26,11 @@ public interface OrderService {
     // 取消订单
     OrderDto cancelOrder(OrderDto orderDto);
 
-    // 支付订单
+    // 完结订单
     OrderDto finishOrder(OrderDto orderDto);
+
+    // 支付订单
+    OrderDto payOrder(OrderDto orderDto);
 
     /*==================卖家端============*/
     // 查询所有订单

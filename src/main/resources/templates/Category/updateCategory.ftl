@@ -50,7 +50,9 @@
                         </div>
                         <br>
                         <div class="control-group"><label class="control-label"><strong>类目类型</strong></label>
-                            <div class="controls"><input id="categoryType" name="categoryType" type="text" value="${productCategory.categoryType}" />
+                            <div class="controls">
+                                <input id="categoryType" name="categoryType" type="text" value="${productCategory.categoryType}" readonly="true" style="background-color: lightgray;"/>
+                            <p>此项不能更改</p>
                             </div>
                         </div>
                         <br>

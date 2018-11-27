@@ -1,7 +1,6 @@
 package com.xinyan.sell.service.impl;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import com.xinyan.sell.converter.OrderMasterToOrderDTOConverter;
+import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.CartDto;
 import com.xinyan.sell.dto.OrderDto;
 import com.xinyan.sell.dto.OrderDtoTO;
@@ -16,13 +15,17 @@ import com.xinyan.sell.repository.OrderDetailRepository;
 import com.xinyan.sell.repository.OrderMasterRepository;
 import com.xinyan.sell.repository.ProductRepository;
 import com.xinyan.sell.service.OrderService;
+import com.xinyan.sell.service.PayService;
 import com.xinyan.sell.service.ProductService;
 import com.xinyan.sell.utils.KeyUtil;
+import com.xinyan.sell.webSocket.SellWebSocket;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.WebSocket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -50,11 +53,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private SellWebSocket webSocket;
+
+    @Autowired
+    private PayService payService;
+
     /**
      * 创建订单
      * @param orderDto
      * @return
      */
+    @Transactional
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
         // 生成订单的ID
@@ -73,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 计算订单总额
-            totalAmount.add(productInfo.getProductPrice().multiply(
+            totalAmount = totalAmount.add(productInfo.getProductPrice().multiply(
                     new BigDecimal(orderDetail.getProductQuantity())));
 
             // 订单详情入库
@@ -96,6 +106,9 @@ public class OrderServiceImpl implements OrderService {
                 map(e -> new CartDto(e.getProductId(), e.getProductQuantity())).
                 collect(Collectors.toList());
         productService.decreaseStock(cartDtoList);
+
+        // 发送WebSocket消息
+        webSocket.sendMessage(orderDto.getOrderId());
 
         // 返回数据
         return orderDto;
@@ -147,6 +160,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDto
      * @return
      */
+    @Transactional
     @Override
     public OrderDto cancelOrder(OrderDto orderDto) {
         //1.判断订单状态，已完结和已取消订单不能取消
@@ -174,6 +188,12 @@ public class OrderServiceImpl implements OrderService {
                 map(e -> new CartDto(e.getProductId(), e.getProductQuantity())).
                 collect(Collectors.toList());
         productService.increaseStock(cartDtoList);
+
+        // 4.如果已经支付,需要退款
+        if (orderDto.getPayStatus().equals(PayStatus.FINISHED)){
+            payService.refund(orderDto);
+        }
+
         return orderDto;
     }
 
@@ -182,6 +202,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderDto
      * @return
      */
+    @Transactional
     @Override
     public OrderDto finishOrder(OrderDto orderDto){
         //查询订单状态
@@ -200,6 +221,40 @@ public class OrderServiceImpl implements OrderService {
             log.error("【完结订单】订单更新失败，OrderMaster:{}",orderMaster);
             throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
         }
+        return orderDto;
+    }
+
+    /**
+     * 订单支付完成
+     * @param orderDto
+     * @return
+     */
+    @Override
+    public OrderDto payOrder(OrderDto orderDto) {
+        // 判断订单的状态
+        if (!orderDto.getOrderStatus().equals(OrderStatus.NEW_ORDER.getCode())){
+            log.error("[订单支付完成] 订单状态不正确, orderId :" + orderDto.getOrderId(),
+                    orderDto.getOrderId(), orderDto.getOrderStatus());
+            throw new SellException(ResultStatus.ORDER_STATUS_ERROR);
+        }
+
+        // 判断订单的支付状态
+        if (!orderDto.getPayStatus().equals(PayStatus.WAIT.getCode())){
+            log.error("[订单支付完成] 订单状态不正确, orderDto :" + orderDto);
+            throw new SellException(ResultStatus.ORDER_PAY_STATUS_ERROR);
+        }
+
+        // 修改支付状态后重新保存数据
+        orderDto.setPayStatus(PayStatus.FINISHED.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDto, orderMaster);
+        OrderMaster result = orderMasterRepository.save(orderMaster);
+        // 如果返回的结果是空,说明订单更新失败
+        if (result == null){
+            log.error("[订单支付完成] 订单更新失败, orderDto :" +orderDto);
+            throw new SellException(ResultStatus.ORDER_UPDATE_FAIL);
+        }
+
         return orderDto;
     }
 

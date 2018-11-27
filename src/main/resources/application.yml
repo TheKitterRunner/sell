@@ -15,9 +15,22 @@ spring:
     settings:
       auto_import: /spring.ftl as spring
 
+  redis:
+    host: 193.168.2.119
+    port: 6379
+
 server:
   context-path: /sell
 
 wechat:
   mpAppId: wx2947344d6bf07cab
   mpAppSecret: d0f905b6b7bc8ccf7aecf1ff7a10bbe8
+  key-path: /var/wechat_cert/apiclient_cert.p12 #问价需要可读的权限
+  mchId:  #TODO 商户的id
+  mchKey:
+  notify-url:  #TODO 商户的秘钥
+
+projectUrl:
+  wechatMpAuthorize: http://227aq28234.imwork.net:36320  #微信公众平台授权url
+  wechatOpenAuthorize: http://227aq28234.imwork.net:36320  #微信开放平台授权url
+  sell: http://227aq28234.imwork.net:36320  #项目url

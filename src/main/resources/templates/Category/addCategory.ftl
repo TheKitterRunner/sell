@@ -40,15 +40,15 @@
         <div class="container">
             <div class="row">
                 <div class="span12">
-                    <form class="form-horizontal" action="${basePath}/seller/category/doAddCategory" method="post" >
+                    <form class="form-horizontal" action="${basePath}/seller/category/doAddCategory" onclick="submitData()" method="post" >
                         <div class="control-group">
                             <label class="control-label" for="categoryName">类目名称</label>
-                            <input id="categoryName" name="categoryName" type="text" />
+                            <input id="categoryName" name="categoryName" type="text" required name="categoryName"/>
                         </div>
                         <br>
                         <div class="control-group">
                             <label class="control-label" for="categoryType">类目编号</label>
-                            <input id="categoryType" name="categoryType" type="text" />
+                            <input id="categoryType" name="categoryType" type="text" required name="categoryType"/>
                         </div>
                         <br>
                         <center><button class="btn btn-primary" name="signup" type="submit" value="Sign up">添加类目</button></center>
@@ -60,7 +60,20 @@
 </div>
 
 <#include "../common/layout.ftl">
-<script></script>
+<script>
+
+    function submitData(){
+        $.post("/student/add",
+                {
+                    name:$("#name").val(),
+                    age:$("#age").val()
+                },
+                function(result){
+                    alert(result);
+                }
+        );
+    }
+</script>
 <#include "../common/js.ftl">
 </body>
 </html>

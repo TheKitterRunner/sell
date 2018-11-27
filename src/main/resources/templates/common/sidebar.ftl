@@ -61,8 +61,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="authentication-login1.html
-                                   " aria-expanded="false">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="${basePath}/seller/logout" aria-expanded="false">
                         <i class="mdi mdi-directions"></i>
                         <span class="hide-menu">登出</span>
                     </a>

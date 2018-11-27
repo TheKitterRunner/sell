@@ -2,11 +2,11 @@ package com.xinyan.sell.po;
 
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -25,10 +25,10 @@ public class ProductCategory implements Serializable {
     private Integer categoryId;
 
     /** 类目名称 */
-    @NotNull
+    @NotEmpty(message = "类目名称不能为空")
     private String categoryName;
 
     /** 类目编号 */
-    @NotNull
+    @NotEmpty(message = "类目编号不能为空")
     private Integer categoryType;
 }

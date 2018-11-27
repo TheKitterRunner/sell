@@ -1,5 +1,8 @@
 package com.xinyan.sell.controller;
 
+import com.xinyan.sell.config.ProjectUrlConfig;
+import com.xinyan.sell.enums.ResultStatus;
+import com.xinyan.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -28,6 +31,13 @@ public class WechatController {
     @Autowired
     private WxMpService wxMpService;
 
+    @Autowired
+    private WxMpService wxOpenService;
+
+    @Autowired
+    private ProjectUrlConfig projectUrlConfig;
+
+    //==================================微信支付获取openid(公众平台)==================================//
     /**
      * 1).用户同意授权，获取code
      * 2).通过code获取网页授权access_token
@@ -66,6 +76,13 @@ public class WechatController {
 
     }
 
+    /**
+     * 根据authorize方法返回的code和state获取微信用户的openid
+     * @param code
+     * @param returnUrl
+     * @param response
+     * @return
+     */
     @GetMapping("/userInfo")
     public String userInfo(@RequestParam("code") String code,
                            @RequestParam("state") String returnUrl,
@@ -73,6 +90,7 @@ public class WechatController {
 
 
         WxMpUser wxMpUser = null;
+        String openId = null;
 
         try{
             //当用户同意授权后，会回调所设置的url并把authorization code 传过来
@@ -80,14 +98,52 @@ public class WechatController {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
             //获取用户基本信息
             wxMpUser = wxMpService.oauth2getUserInfo(wxMpOAuth2AccessToken,null);
+
+            //获取用户openId
+            openId = wxMpUser.getOpenId();
         }catch (WxErrorException e){
             log.error("【微信网页授权】{}", e);
         }
 
-        //获取用户openId
+        return "redirect:"+"http://227aq28234.imwork.net:36320/#/"+"?openid="+openId;
+
+    }
+
+    //==================================微信扫码登录获取openid(开放平台)==================================//
+
+    @GetMapping("/qrAuthorize")
+    public String qrAuthorize(@RequestParam("returnUrl") String returnUrl) {
+        //构造网页授权url，然后构成超链接让用户点击重定向的url地址
+        String url = projectUrlConfig.getWechatOpenAuthorize() + "/sell/wechat/qrUserInfo";
+
+        String redirectUrl = null;
+        try {
+            //网站扫码登录scope：snsapi_login
+            redirectUrl = wxOpenService.buildQrConnectUrl(url, WxConsts.QrConnectScope.SNSAPI_LOGIN,
+                    URLEncoder.encode(returnUrl, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            log.error("【微信网页授权】获取code, redirectUrl:{}", redirectUrl);
+            throw new SellException(ResultStatus.WECHAT_MP_AUTHORIZE_ERROR);
+        }
+
+        return "redirect:" + redirectUrl;
+    }
+
+    @GetMapping("/qrUserInfo")
+    public String qrUserInfo(@RequestParam("code") String code,
+                             @RequestParam("state") String returnUrl){
+        WxMpUser wxMpUser = null;
+        try {
+            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxOpenService.oauth2getAccessToken(code);
+            wxMpUser = wxOpenService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
+        } catch (WxErrorException e) {
+            log.error("【微信扫码登录网页授权】{}", e);
+            throw new SellException(ResultStatus.WECHAT_MP_AUTHORIZE_ERROR.getCode(),
+                    e.getError().getErrorMsg());
+        }
+
         String openId = wxMpUser.getOpenId();
 
-        return "redirect:http://227aq28234.imwork.net:36320/#/?openid="+openId;
-
+        return "redirect:" + returnUrl + "?openid=" + openId;
     }
 }

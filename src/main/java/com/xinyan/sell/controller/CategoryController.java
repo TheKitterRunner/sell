@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,9 +79,13 @@ public class CategoryController {
      * @return
      */
     @PostMapping("/doAddCategory")
-    public String addCategory(@Valid ProductCategory productCategory) {
-        productCategoryService.saveCategory(productCategory);
-        return "redirect:list";
+    public String addCategory(@Valid ProductCategory productCategory, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return bindingResult.getFieldError().getDefaultMessage();
+        }else {
+            productCategoryService.saveCategory(productCategory);
+            return "redirect:list";
+        }
     }
 
     /**

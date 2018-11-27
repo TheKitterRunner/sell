@@ -1,30 +1,23 @@
-<#assign basePath=request.contextPath />
 <!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>微信点餐管理后台 - 错误提示</title>
-    <link href="${basePath}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-</head>
+
+<#include "header.ftl">
+
 <body>
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">系统消息</h1>
-    <p class="lead"></p>
-</div>
+
+<div style="margin-top:100px"></div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-dismissable alert-danger">
-                <h4>
-                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    错误!
-                </h4>
-                <strong>${msg}, </strong>
-                <a href="${basePath}/${url}" class="alert-link">3秒后页面自动跳转...</a>
+        <div class="d-flex justify-content-center col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">系统提示</h4>
+                    <div class="alert alert-warning">
+                        <h4 class="text-warning"><i class="fa fa-exclamation-triangle"></i> 警告</h4>
+                        <p>${msg}</p>
+                        <hr>
+                        <a href="${basePath}/${url}" class="alert-link">3秒后页面自动跳转...没有跳转请点击</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

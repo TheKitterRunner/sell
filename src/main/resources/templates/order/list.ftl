@@ -125,9 +125,78 @@
         </div>
     </div>
 </div>
+<#--弹窗-->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLable">系统消息</h4>
+                <button onclick="closeMusic()" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                你有新的订单
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeMusic()" type="button" class="btn btn-danger waves-effect" data-dismiss="modal">关闭</button>
+                <#--<button onclick="location.reload()" type="button" class="btn btn-primary">查看新的订单</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<#--播放音乐 H5-->
+<audio id="notice" loop="loop">
+    <source src="${basePath}/mp3/Myfavorite.mp3" type="audio/mpeg" />
+</audio>
 
 <#include "../common/layout.ftl">
-
 <#include "../common/js.ftl">
+<script>
+    var websocket = null;
+    if('WebSocket' in window) {
+        websocket = new WebSocket('ws://localhost:8080/sell/webSocket');
+    }else {
+        alert('该浏览器不支持websocket!');
+    }
+
+    // 建立连接
+    websocket.onopen = function (ev) {
+        console.log('建立连接');
+    }
+
+    // 关闭连接
+    websocket.onclose = function (ev) {
+        console.log('连接关闭');
+    }
+
+    // 接收消息
+    websocket.onmessage = function (ev) {
+        console.log('收到消息:' + ev.data)
+        //弹窗提醒
+        $('#myModal').modal('show');
+
+        //播放音乐
+        $('#notice')[0].play();
+       // document.getElementById('notice').play();
+    }
+
+    // 错误处理
+    websocket.onerror = function () {
+        alert('websocket通信发生错误！');
+    }
+
+    window.onbeforeunload = function () {
+        websocket.close();
+    }
+
+    // 关闭音乐
+    function closeMusic() {
+        // 暂停音乐
+        $("#notice")[0].pause();
+        // 页面刷新
+        window.location.reload();
+    }
+
+</script>
 </body>
 </html>

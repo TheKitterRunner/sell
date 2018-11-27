@@ -151,6 +151,6 @@ public class BuyerOrderController {
         // 调用完结订单的方法,返回更改状态后的orderDto
         OrderDto finishOrderDto = orderService.finishOrder(orderDto);
         return ResultVOUtil.success(finishOrderDto);
-
     }
+
 }
