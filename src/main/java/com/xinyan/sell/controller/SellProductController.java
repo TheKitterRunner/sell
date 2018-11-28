@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,8 +85,8 @@ public class SellProductController {
         //创建一个空分页对象，运用方法查询数据库放入分页对象中
         PageRequest pageRequest = new PageRequest(page - 1 ,size);
         Page<ProductInfo> productInfoPage = productService.findAll(pageRequest);
-        Page<ProductCategory> productCategoryPage = productCategoryService.findList(pageRequest);
-        categoryMap.put("productCategoryPage",productCategoryPage);
+        List<ProductCategory> categoryList = productCategoryService.findAll();
+        categoryMap.put("productCategoryPage",categoryList);
         //把获得的分页对象放入map提供给页面查询
         map.put("productInfoPage",productInfoPage);
         return "Product/productList";

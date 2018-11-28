@@ -1,6 +1,5 @@
 package com.xinyan.sell.controller;
 
-import com.lly835.bestpay.rest.type.Get;
 import com.xinyan.sell.config.ProjectUrlConfig;
 import com.xinyan.sell.constant.CookieConstant;
 import com.xinyan.sell.constant.RedisConstant;
@@ -23,7 +22,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class SellerUserController {
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private SellerService sellerService;
@@ -64,6 +62,21 @@ public class SellerUserController {
     @PostMapping("/accountLogin")
     public String accountLogin(@RequestParam("account") String account,
                                @RequestParam("password") String password) {
+//        // 1.根据openid查询卖家信息
+//        SellerInfo sellerByOpenid = sellerService.findSellerByOpenid(openid);
+//        if (sellerByOpenid == null){
+//            map.put("msg", ResultStatus.LOGIN_FAILED.getMessage());
+//            map.put("url", "/sell/seller/order/list");
+//            return new ModelAndView("common/error");
+//        }
+//
+//        // 2.将 Token 设置到redis中
+//        String token = String.format(RedisConstant.TOKEN_PREFIX, KeyUtil.generatedUniqueKey());
+//
+//        stringRedisTemplate.opsForValue().set(token, openid, RedisConstant.EXPIRE, TimeUnit.SECONDS);
+//
+//        //3. 设置token至cookie
+//        CookieUtil.set(response, CookieConstant.TOKEN, token, CookieConstant.EXPIRE);
         return "redirect:/seller/order/list";
     }
     /**
@@ -74,26 +87,26 @@ public class SellerUserController {
      * @return
      */
     @GetMapping("/login")
-    public ModelAndView login(@RequestParam("openid") String openid,
+    public String login(@RequestParam("openid") String openid,
                               HttpServletResponse response,
                               Map<String, Object> map){
         // 1.根据openid查询卖家信息
         SellerInfo sellerByOpenid = sellerService.findSellerByOpenid(openid);
         if (sellerByOpenid == null){
             map.put("msg", ResultStatus.LOGIN_FAILED.getMessage());
-            map.put("url", "/sell/seller/order/list");
-            return new ModelAndView("common/error");
+            map.put("url", "seller/order/list");
+            return "common/error";
         }
 
-        // 2.将 Token 设置到redis中
+        //2设置 token 至 redis
         String token = String.format(RedisConstant.TOKEN_PREFIX, KeyUtil.generatedUniqueKey());
 
-        stringRedisTemplate.opsForValue().set(token, openid, RedisConstant.EXPIRE, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(token, openid, RedisConstant.EXPIRE, TimeUnit.SECONDS);
 
-        //3. 设置token至cookie
+        //3.设置 token 至 cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, CookieConstant.EXPIRE);
 
-        return new ModelAndView("redirect:/seller/order/list");
+        return  "redirect:/seller/order/list";
     }
 
     /**
@@ -111,7 +124,7 @@ public class SellerUserController {
         Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
         if (cookie != null) {
             //2. 清除redis
-            stringRedisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
 
             //3. 清除cookie
             CookieUtil.set(response, CookieConstant.TOKEN, null, 0);

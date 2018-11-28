@@ -70,7 +70,7 @@
                                             <#if productInfo.productStatus == 1 >
                                             <td name="productStatus">已下架</td>
                                             </#if>
-                                            <#list productCategoryPage.content as productCategory>
+                                            <#list productCategoryPage as productCategory>
                                             <#if productCategory.categoryType == productInfo.categoryType>
                                             <td name="categoryName">${productCategory.categoryName}</td>
                                             </#if>

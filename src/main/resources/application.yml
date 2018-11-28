@@ -16,7 +16,7 @@ spring:
       auto_import: /spring.ftl as spring
 
   redis:
-    host: 193.168.2.119
+    host: 192.168.2.119
     port: 6379
 
 server:
@@ -27,7 +27,7 @@ wechat:
   mpAppSecret: d0f905b6b7bc8ccf7aecf1ff7a10bbe8
   key-path: /var/wechat_cert/apiclient_cert.p12 #问价需要可读的权限
   mchId:  #TODO 商户的id
-  mchKey:
+  mchKey: #TODO
   notify-url:  #TODO 商户的秘钥
 
 projectUrl:
